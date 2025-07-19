@@ -1,10 +1,7 @@
 import pytest
 
-from pathlib import Path
 
-from src.sudoq import Board, Unit, Digit, Nine
-
-TEST_DIR = Path(__file__).parent
+from context import Board, Unit, Digit, Nine, TEST_DIR
 
 
 @pytest.mark.parametrize(
@@ -22,16 +19,6 @@ def test_unit_is_valid(values: Nine[Digit], expectation: bool):
 
 def test_board_is_valid():
     board = Board(rows=[Unit(values=(1, 2, 3, 4, 5, 6, 7, 8, 9)) for _ in range(9)])
-    assert board.is_valid()
-
-
-@pytest.mark.parametrize("delimiter", (",", ";", "|"))
-def test_board_from_csv(tmp_path, delimiter):
-    csv_path = tmp_path / "board.csv"
-    csv_path.write_text(
-        "\n".join(delimiter.join(str(i + 1) for i in range(9)) for _ in range(9))
-    )
-    board = Board.from_csv_file(str(csv_path), delimiter=delimiter)
     assert board.is_valid()
 
 
