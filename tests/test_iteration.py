@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 
 
 from context import Board, SAMPLE_DIR
@@ -20,7 +21,7 @@ def get_lines_of_csv(path: str) -> list[list[int]]:
 
 
 @pytest.mark.parametrize("path", (SAMPLE_DIR / "valid-1.csv",))
-def test_iter_rows(path):
+def test_iter_rows(path: Path):
     board = Board.from_csv_file(str(path))
     lines = get_lines_of_csv(str(path))
     for line, unit in zip(lines, board.iter_rows()):
@@ -28,7 +29,7 @@ def test_iter_rows(path):
 
 
 @pytest.mark.parametrize("path", (SAMPLE_DIR / "valid-1.csv",))
-def test_iter_cols(path):
+def test_iter_cols(path: Path):
     board = Board.from_csv_file(str(path))
     lines = get_lines_of_csv(path)
     for i, unit in enumerate(board.iter_cols()):
@@ -36,7 +37,7 @@ def test_iter_cols(path):
 
 
 @pytest.mark.parametrize("path", (SAMPLE_DIR / "valid-1.csv",))
-def test_iter_boxes(path):
+def test_iter_boxes(path: Path):
     board = Board.from_csv_file(str(path))
     lines = get_lines_of_csv(path)
     for (row_offset, col_offset), unit in zip(iter_offsets(), board.iter_boxes()):
