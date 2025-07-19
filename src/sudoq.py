@@ -29,7 +29,7 @@ class Board:
         with open(path) as csv:
             return cls(
                 rows=tuple(
-                    Unit(line)
+                    Unit(list(map(int, line)))
                     for raw_line in csv.readlines()
                     if (line := raw_line.strip("\n ").split(delimiter))[0]
                 )

@@ -42,3 +42,15 @@ def test_board_from_csv(tmp_path, delimiter):
 def test_csv_is_valid(path):
     board = Board.from_csv_file(path)
     assert board.is_valid()
+
+
+@pytest.mark.parametrize(
+    "path",
+    [TEST_DIR / "assets" / "samples" / "valid-1.csv"],
+)
+def test_contains_Digits(path):
+    board = Board.from_csv_file(path)
+    for row in board.rows:
+        for value in row.values:
+            assert isinstance(value, int)
+            assert 0 <= value <= 9
