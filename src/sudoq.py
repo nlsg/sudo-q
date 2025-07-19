@@ -41,7 +41,7 @@ class Board:
 
     def iter_cols(self) -> Iterator[Unit]:
         for i in get_args(Index):
-            yield Unit(values=[self.rows[j].values[i] for j in get_args(Index)])
+            yield self.get_col((0, i))
 
     def iter_boxes(self) -> Iterator[Unit]:
         for row_offset in 0, 3, 6:
