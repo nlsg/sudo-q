@@ -10,7 +10,7 @@ Index = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8]
 Position = Tuple[Index, Index]
 
 
-@dataclass
+@dataclass(frozen=True)
 class Unit:
     values: Nine[Digit]
 
