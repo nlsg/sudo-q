@@ -66,13 +66,7 @@ class Board:
     def iter_boxes(self) -> Iterator[Unit]:
         for row_offset in 0, 3, 6:
             for col_offset in 0, 3, 6:
-                yield Unit(
-                    values=list(
-                        self.rows[row_offset + i].values[col_offset + r]
-                        for i in range(3)
-                        for r in range(3)
-                    )
-                )
+                yield self.get_box((row_offset, col_offset))
 
     def is_valid(self) -> bool:
         return all(u.is_valid() for u in self.rows)
