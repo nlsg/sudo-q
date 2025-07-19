@@ -35,6 +35,26 @@ class Board:
                 )
             )
 
+    def get_row(self, position: Position) -> Unit:
+        row, _ = position
+        return self.rows[row]
+
+    def get_col(self, position: Position) -> Unit:
+        _, col = position
+        return Unit(values=[self.rows[i].values[col] for i in get_args(Index)])
+
+    def get_box(self, position: Position) -> Unit:
+        row, col = position
+        start_row = (row // 3) * 3
+        start_col = (col // 3) * 3
+        return Unit(
+            values=list(
+                self.rows[start_row + r].values[start_col + c]
+                for r in range(3)
+                for c in range(3)
+            )
+        )
+
     def iter_rows(self) -> Iterator[Unit]:
         for row in self.rows:
             yield row

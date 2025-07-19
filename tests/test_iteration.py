@@ -1,8 +1,7 @@
 import pytest
 from pathlib import Path
 
-
-from context import Board, SAMPLE_DIR
+from context import Board, SAMPLE_DIR, Nine, Position, Digit
 
 
 def iter_offsets():
@@ -45,3 +44,43 @@ def test_iter_boxes(path: Path):
             lines[row_offset + i][col_offset + r] for i in range(3) for r in range(3)
         )
         assert unit.values == box
+
+
+@pytest.mark.parametrize(
+    ("path", "position", "expectation"),
+    (
+        ((SAMPLE_DIR / "valid-1.csv"), (0, 0), (7, 0, 0, 0, 1, 9, 2, 0, 0)),
+        ((SAMPLE_DIR / "valid-1.csv"), (1, 2), (7, 0, 0, 0, 1, 9, 2, 0, 0)),
+        ((SAMPLE_DIR / "valid-1.csv"), (3, 3), (9, 2, 0, 0, 5, 0, 8, 4, 0)),
+    ),
+)
+def test_get_box(path: Path, position: Position, expectation: Nine[Digit]):
+    board = Board.from_csv_file(str(path))
+    u1 = board.get_box(position)
+    assert tuple(u1.values) == tuple(expectation)
+
+
+@pytest.mark.parametrize(
+    ("path", "position", "expectation"),
+    (
+        ((SAMPLE_DIR / "valid-1.csv"), (0, 2), (7, 0, 0, 4, 9, 0, 0, 1, 2)),
+        ((SAMPLE_DIR / "valid-1.csv"), (2, 8), (2, 0, 0, 6, 1, 8, 0, 0, 0)),
+    ),
+)
+def test_get_row(path: Path, position: Position, expectation: Nine[Digit]):
+    board = Board.from_csv_file(str(path))
+    u1 = board.get_row(position)
+    assert tuple(u1.values) == tuple(expectation)
+
+
+@pytest.mark.parametrize(
+    ("path", "position", "expectation"),
+    (
+        ((SAMPLE_DIR / "valid-1.csv"), (0, 2), (0, 9, 0, 0, 0, 1, 0, 7, 6)),
+        ((SAMPLE_DIR / "valid-1.csv"), (2, 7), (1, 4, 0, 6, 0, 0, 2, 5, 0)),
+    ),
+)
+def test_get_col(path: Path, position: Position, expectation: Nine[Digit]):
+    board = Board.from_csv_file(str(path))
+    u1 = board.get_col(position)
+    assert tuple(u1.values) == tuple(expectation)
