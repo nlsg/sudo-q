@@ -1,4 +1,4 @@
-from typing import Literal, Tuple, TypeVar
+from typing import Literal, Tuple, TypeVar, Iterator, get_args
 from dataclasses import dataclass
 
 T = TypeVar("T")
@@ -35,5 +35,23 @@ class Board:
                 )
             )
 
+    def iter_rows(self) -> Iterator[Unit]:
+        for row in self.rows:
+            yield row
+
+    def iter_cols(self) -> Iterator[Unit]:
+        for i in get_args(Index):
+            yield Unit(values=[self.rows[j].values[i] for j in get_args(Index)])
+
+    def iter_boxes(self) -> Iterator[Unit]:
+        for row_offset in 0, 3, 6:
+            for col_offset in 0, 3, 6:
+                yield Unit(
+                    values=list(
+                        self.rows[row_offset + i].values[col_offset + r]
+                        for i in range(3)
+                        for r in range(3)
+                    )
+                )
     def is_valid(self):
         return all(u.is_valid() for u in self.rows)
