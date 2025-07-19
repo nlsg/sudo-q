@@ -1,4 +1,4 @@
-from typing import Literal, Tuple, TypeVar, Iterator, get_args
+from typing import Literal, Tuple, TypeVar, Iterator, get_args, Annotated
 from dataclasses import dataclass
 
 T = TypeVar("T")
@@ -7,7 +7,7 @@ Nine = Tuple[T, T, T, T, T, T, T, T, T]
 Digit = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 Index = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-Position = Tuple[Index, Index]
+Position = Annotated[Tuple[Index, Index], "row, column"]
 
 
 @dataclass(frozen=True)
@@ -22,7 +22,7 @@ class Unit:
 
 @dataclass(frozen=True)
 class Board:
-    rows: list[Unit]
+    rows: Nine[Unit]
 
     @classmethod
     def from_csv_file(cls, path: str, delimiter=",") -> "Board":
@@ -53,5 +53,6 @@ class Board:
                         for r in range(3)
                     )
                 )
-    def is_valid(self):
+
+    def is_valid(self) -> bool:
         return all(u.is_valid() for u in self.rows)
