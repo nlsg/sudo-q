@@ -10,6 +10,9 @@ Index = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8]
 Position = Annotated[Tuple[Index, Index], "row, column"]
 
 
+DIGITS = set(get_args(Digit)) - {0}
+
+
 @dataclass(frozen=True)
 class Unit:
     values: Nine[Digit]
@@ -17,6 +20,20 @@ class Unit:
     def is_valid(self):
         return len(self.values) == 9 and all(
             self.values.count(i) <= 1 for i in range(1, 10)
+        )
+
+    def is_complete(self) -> bool:
+        return 0 not in self.values
+
+    def get_filled_values(self) -> set[Digit]:
+        return set(self.values) - {0}
+
+    def get_candidates(self) -> set[Digit]:
+        return DIGITS - self.get_filled_values()
+
+    def __eq__(self, other: "Unit"):
+        return isinstance(other, Unit) and all(
+            s == o for s, o in zip(self.values, other.values)
         )
 
 
@@ -34,6 +51,47 @@ class Board:
                     if (line := raw_line.strip("\n ").split(delimiter))[0]
                 )
             )
+
+    def with_placement(self, position: Position, value: Digit) -> "Board":
+        row, col = position
+        changed_unit = Unit(
+            values=[
+                value if i == col else v for i, v in enumerate(self.rows[row].values)
+            ]
+        )
+        return Board(
+            rows=(list(self.rows[:row]) + [changed_unit] + list(self.rows[row + 1 :]))
+        )
+
+    def solve_step(self) -> "Board":
+        for position in self.iter_empty_positions():
+            candidates = self.get_candidates(position)
+            if len(candidates) == 1:
+                return self.with_placement(position, next(iter(candidates)))
+        return self
+
+    def solve(self) -> "Board":
+        board = self
+        while not board.is_solved():
+            board = board.solve_step()
+        return board
+
+    def get_candidates(self, position: Position) -> set[Digit]:
+        return (
+            self.get_row(position).get_candidates()
+            & self.get_col(position).get_candidates()
+            & self.get_box(position).get_candidates()
+        )
+
+    def iter_empty_positions(self) -> Iterator[Position]:
+        for row_index, unit in enumerate(self.iter_rows()):
+            for col_index, value in enumerate(unit.values):
+                if not value:
+                    yield row_index, col_index
+
+    def get_cell(self, position: Position) -> Digit:
+        row, col = position
+        return self.rows[row].values[col]
 
     def get_row(self, position: Position) -> Unit:
         row, _ = position
@@ -70,3 +128,12 @@ class Board:
 
     def is_valid(self) -> bool:
         return all(u.is_valid() for u in self.rows)
+
+    def is_solved(self) -> bool:
+        return all(unit.is_complete() for unit in self.rows)
+
+    def __eq__(self, other: "Board"):
+        return isinstance(other, Board) and all(
+            own_unit == other_unit
+            for own_unit, other_unit in zip(self.iter_rows(), other.iter_rows())
+        )

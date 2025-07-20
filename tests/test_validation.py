@@ -1,7 +1,7 @@
 import pytest
 
 
-from context import Board, Unit, Digit, Nine, TEST_DIR
+from context import Board, Unit, Digit, Nine, SAMPLE_DIR
 
 
 @pytest.mark.parametrize(
@@ -24,7 +24,7 @@ def test_board_is_valid():
 
 @pytest.mark.parametrize(
     "path",
-    [TEST_DIR / "assets" / "samples" / "valid-1.csv"],
+    [SAMPLE_DIR / "valid-1.csv"],
 )
 def test_csv_is_valid(path):
     board = Board.from_csv_file(path)
@@ -33,7 +33,7 @@ def test_csv_is_valid(path):
 
 @pytest.mark.parametrize(
     "path",
-    [TEST_DIR / "assets" / "samples" / "valid-1.csv"],
+    [SAMPLE_DIR / "valid-1.csv"],
 )
 def test_contains_Digits(path):
     board = Board.from_csv_file(path)
