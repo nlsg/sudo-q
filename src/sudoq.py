@@ -35,6 +35,21 @@ class Board:
                 )
             )
 
+    def with_placement(self, position: Position, value: Digit) -> "Board":
+        row, col = position
+        changed_unit = Unit(
+            values=[
+                value if i == col else v for i, v in enumerate(self.rows[row].values)
+            ]
+        )
+        return Board(
+            rows=(list(self.rows[:row]) + [changed_unit] + list(self.rows[row + 1 :]))
+        )
+
+    def get_cell(self, position: Position) -> Digit:
+        row, col = position
+        return self.rows[row].values[col]
+
     def get_row(self, position: Position) -> Unit:
         row, _ = position
         return self.rows[row]
