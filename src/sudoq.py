@@ -137,3 +137,21 @@ class Board:
             own_unit == other_unit
             for own_unit, other_unit in zip(self.iter_rows(), other.iter_rows())
         )
+
+    def __str__(self):
+        empty_cells = len(list(self.iter_empty_positions()))
+
+        def format_unit(unit):
+            return " ".join(
+                map(
+                    lambda iv: f" {iv[1]}" if not iv[0] % 3 else str(iv[1]),
+                    enumerate(unit.values),
+                )
+            )
+
+        return f"Board: {empty_cells}/{81 - empty_cells}" + "\n".join(
+            map(
+                lambda iv: f"\n{iv[1]}" if not iv[0] % 3 else str(iv[1]),
+                enumerate(format_unit(u) for u in self.rows),
+            )
+        )
