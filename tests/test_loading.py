@@ -15,6 +15,13 @@ def test_board_from_csv(tmp_path, delimiter):
     assert board.is_valid()
 
 
+def test_construct_empty():
+    empty_board = Board.construct_empty()
+    assert len(empty_board.rows) == 9
+    assert all(len(u.values) == 9 for u in empty_board.rows)
+    assert empty_board.is_valid()
+
+
 def test_board_str(sample_board):
     assert str(sample_board) == "\n".join(
         (

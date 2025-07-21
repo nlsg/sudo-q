@@ -52,6 +52,10 @@ class Board:
                 )
             )
 
+    @classmethod
+    def construct_empty(cls) -> "Board":
+        return cls(rows=[Unit(values=[0] * 9)] * 9)
+
     def with_placement(self, position: Position, value: Digit) -> "Board":
         row, col = position
         changed_unit = Unit(
