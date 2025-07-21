@@ -76,6 +76,15 @@ class Board:
             board = board.solve_step()
         return board
 
+    def solve_backtracking(self) -> "Board":
+        if not (position := next(self.iter_empty_positions(), None)):
+            return self
+        for candidate in self.get_candidates(position):
+            board = self.with_placement(position, candidate).solve_backtracking()
+            if board.is_solved():
+                return board
+        return self
+
     def get_candidates(self, position: Position) -> set[Digit]:
         return (
             self.get_row(position).get_candidates()

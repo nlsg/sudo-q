@@ -35,3 +35,18 @@ def test_solve(path: Path, solved_path: Path):
     board = Board.from_csv_file(str(path))
     solved = Board.from_csv_file(str(solved_path))
     assert board.solve() == solved
+
+
+@pytest.mark.parametrize(
+    ("path", "solved_path"),
+    (
+        (
+            (SAMPLE_DIR / "valid-1.csv"),
+            (SAMPLE_DIR / "solved-1.csv"),
+        ),
+    ),
+)
+def test_solve_backtracking(path: Path, solved_path: Path):
+    board = Board.from_csv_file(str(path))
+    solved = Board.from_csv_file(str(solved_path))
+    assert board.solve_backtracking() == solved
