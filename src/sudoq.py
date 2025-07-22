@@ -56,6 +56,9 @@ class Board:
     def construct_empty(cls) -> "Board":
         return cls(rows=[Unit(values=[0] * 9)] * 9)
 
+    def generate_solved(self) -> "Board":
+        return self.solve_backtracking()
+
     def with_placement(self, position: Position, value: Digit) -> "Board":
         row, col = position
         changed_unit = Unit(
