@@ -1,4 +1,4 @@
-from typing import Literal, Tuple, TypeVar, Iterator, get_args, Annotated
+from typing import Literal, Tuple, TypeVar, Iterator, get_args, Annotated, Optional
 from dataclasses import dataclass
 
 T = TypeVar("T")
@@ -74,10 +74,13 @@ class Board:
                 return self.with_placement(position, next(iter(candidates)))
         return self
 
-    def solve(self) -> "Board":
+    def solve(self) -> Optional["Board"]:
         board = self
         while not board.is_solved():
-            board = board.solve_step()
+            next_board = board.solve_step()
+            if next_board == board:
+                return None
+            board = next_board
         return board
 
     def solve_backtracking(self) -> "Board":

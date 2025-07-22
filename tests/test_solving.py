@@ -37,6 +37,10 @@ def test_solve(path: Path, solved_path: Path):
     assert board.solve() == solved
 
 
+def test_unsolvable():
+    assert Board.construct_empty().solve() is None
+
+
 @pytest.mark.parametrize(
     ("path", "solved_path"),
     (
