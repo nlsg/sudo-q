@@ -1,5 +1,6 @@
 from typing import Iterator, get_args, Optional
 from dataclasses import dataclass
+import random
 
 from .core import Digit, Nine, Index, Position
 from .unit import Unit
@@ -26,6 +27,25 @@ class Grid:
 
     def generate_solved(self) -> "Grid":
         return self.solve_backtracking()
+
+    def generate_puzzle(self) -> "Grid":
+        next_puzzle = puzzle = self.generate_solved()
+
+        def get_random_position() -> Position:
+            while (
+                position := (
+                    random.choice(get_args(Index)),
+                    random.choice(get_args(Index)),
+                )
+            ) not in self.iter_empty_positions():
+                pass
+            return position
+
+        while True:
+            if next_puzzle.solve() is None and not next_puzzle.is_solved():
+                return puzzle
+            puzzle = next_puzzle
+            next_puzzle = puzzle.with_placement(get_random_position(), 0)
 
     def with_placement(self, position: Position, value: Digit) -> "Grid":
         row, col = position
@@ -163,3 +183,10 @@ class Grid:
                 enumerate(format_unit(u) for u in self.rows),
             )
         )
+
+
+if __name__ == "__main__":
+    while True:
+        print(puzzle := Grid.construct_empty().generate_puzzle())
+        print(puzzle.solve())
+        input("next?")
