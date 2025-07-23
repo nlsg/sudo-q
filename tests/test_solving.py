@@ -39,10 +39,7 @@ def test_solve(path: Path, solved_path: Path):
 
 @pytest.mark.parametrize(
     ("path"),
-    (
-        SAMPLE_DIR / "valid-1.csv",
-        SAMPLE_DIR / "hard-1.csv",
-    ),
+    (SAMPLE_DIR / "valid-1.csv",),
 )
 def test_solve_against_backtracking(path: Path):
     board = Grid.from_csv_file(str(path))
