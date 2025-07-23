@@ -71,10 +71,30 @@ class Board:
         )
 
     def solve_step(self) -> "Board":
-        for position in self.iter_empty_positions():
+        """unique candidate"""
+        empty_positions = list(self.iter_empty_positions())
+        for position in empty_positions:
+            row, col = position
             candidates = self.get_candidates(position)
+            # sole candidate
             if len(candidates) == 1:
                 return self.with_placement(position, next(iter(candidates)))
+
+        for position in empty_positions:
+            # unique candidate
+            box_positions = list(self.get_box_positions(position))
+            for empties_set in (
+                (p for p in empty_positions if p[0] == row and p[1] != col),
+                (p for p in empty_positions if p[0] != row and p[1] == col),
+                (p for p in empty_positions if p != position and p in box_positions),
+            ):
+                empties_set = list(empties_set)
+                for candidate in candidates:
+                    if not any(
+                        candidate in self.get_candidates(pos) for pos in empties_set
+                    ):
+                        return self.with_placement(position, candidate)
+
         return self
 
     def solve(self) -> Optional["Board"]:
