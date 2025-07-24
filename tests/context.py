@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from src.sudoq import Grid, Unit, Digit, Nine, Position
+from sudoq import Grid, Unit, Digit, Nine, Position
 
 TEST_DIR = Path(__file__).parent
 SAMPLE_DIR = TEST_DIR / "assets" / "samples"
