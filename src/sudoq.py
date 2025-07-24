@@ -1,4 +1,5 @@
 from typing import Literal, Tuple, TypeVar, Iterator, get_args, Annotated, Optional
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 T = TypeVar("T")
@@ -14,7 +15,7 @@ DIGITS = set(get_args(Digit)) - {0}
 
 
 @dataclass(frozen=True)
-class Unit:
+class Unit(Sequence):
     values: Nine[Digit]
 
     def is_valid(self):
@@ -35,6 +36,18 @@ class Unit:
         return isinstance(other, Unit) and all(
             s == o for s, o in zip(self.values, other.values)
         )
+
+    def __iter__(self):
+        return iter(self.values)
+
+    def __len__(self):
+        return len(self.values)
+
+    def __getitem__(self, index):
+        return self.values[index]
+
+    def __contains__(self, item):
+        return item in self.values
 
 
 @dataclass(frozen=True)
@@ -62,9 +75,7 @@ class Grid:
     def with_placement(self, position: Position, value: Digit) -> "Grid":
         row, col = position
         changed_unit = Unit(
-            values=[
-                value if i == col else v for i, v in enumerate(self.rows[row].values)
-            ]
+            values=[value if i == col else v for i, v in enumerate(self.rows[row])]
         )
         return Grid(
             rows=(list(self.rows[:row]) + [changed_unit] + list(self.rows[row + 1 :]))
@@ -126,13 +137,13 @@ class Grid:
 
     def iter_positions(self, value: Digit = 0) -> Iterator[Position]:
         for row_index, unit in enumerate(self.iter_rows()):
-            for col_index, val in enumerate(unit.values):
+            for col_index, val in enumerate(unit):
                 if val == value:
                     yield row_index, col_index
 
     def get_cell(self, position: Position) -> Digit:
         row, col = position
-        return self.rows[row].values[col]
+        return self.rows[row][col]
 
     def get_row(self, position: Position) -> Unit:
         row, _ = position
@@ -140,13 +151,12 @@ class Grid:
 
     def get_col(self, position: Position) -> Unit:
         _, col = position
-        return Unit(values=[self.rows[i].values[col] for i in get_args(Index)])
+        return Unit(values=[self.rows[i][col] for i in get_args(Index)])
 
     def get_box(self, position: Position) -> Unit:
         return Unit(
             values=list(
-                self.rows[row].values[col]
-                for row, col in self.get_box_positions(position)
+                self.rows[row][col] for row, col in self.get_box_positions(position)
             )
         )
 
