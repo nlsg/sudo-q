@@ -11,5 +11,8 @@
         "source.fixAll": "explicit",
     },
     "python.formatting.provider": "none",
-    "ruff.enable": true
+    "ruff.enable": true,
+    "python.analysis.extraPaths": [
+        "src"
+    ]
 }
