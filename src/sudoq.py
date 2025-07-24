@@ -38,11 +38,11 @@ class Unit:
 
 
 @dataclass(frozen=True)
-class Board:
+class Grid:
     rows: Nine[Unit]
 
     @classmethod
-    def from_csv_file(cls, path: str, delimiter=",") -> "Board":
+    def from_csv_file(cls, path: str, delimiter=",") -> "Grid":
         with open(path) as csv:
             return cls(
                 rows=tuple(
@@ -53,24 +53,24 @@ class Board:
             )
 
     @classmethod
-    def construct_empty(cls) -> "Board":
+    def construct_empty(cls) -> "Grid":
         return cls(rows=[Unit(values=[0] * 9)] * 9)
 
-    def generate_solved(self) -> "Board":
+    def generate_solved(self) -> "Grid":
         return self.solve_backtracking()
 
-    def with_placement(self, position: Position, value: Digit) -> "Board":
+    def with_placement(self, position: Position, value: Digit) -> "Grid":
         row, col = position
         changed_unit = Unit(
             values=[
                 value if i == col else v for i, v in enumerate(self.rows[row].values)
             ]
         )
-        return Board(
+        return Grid(
             rows=(list(self.rows[:row]) + [changed_unit] + list(self.rows[row + 1 :]))
         )
 
-    def solve_step(self) -> "Board":
+    def solve_step(self) -> "Grid":
         """unique candidate"""
         empty_positions = list(self.iter_positions(0))
         for position in empty_positions:
@@ -99,7 +99,7 @@ class Board:
 
         return self
 
-    def solve(self) -> Optional["Board"]:
+    def solve(self) -> Optional["Grid"]:
         board = self
         while not board.is_solved():
             next_board = board.solve_step()
@@ -108,7 +108,7 @@ class Board:
             board = next_board
         return board
 
-    def solve_backtracking(self) -> "Board":
+    def solve_backtracking(self) -> "Grid":
         if not (position := next(self.iter_positions(0), None)):
             return self
         for candidate in self.get_candidates(position):
@@ -175,8 +175,8 @@ class Board:
     def is_solved(self) -> bool:
         return all(unit.is_complete() for unit in self.rows)
 
-    def __eq__(self, other: "Board"):
-        return isinstance(other, Board) and all(
+    def __eq__(self, other: "Grid"):
+        return isinstance(other, Grid) and all(
             own_unit == other_unit
             for own_unit, other_unit in zip(self.iter_rows(), other.iter_rows())
         )

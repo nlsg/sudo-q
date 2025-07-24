@@ -1,6 +1,6 @@
 import pytest
 
-from context import Board, sample_board
+from context import Grid, sample_board
 
 sample_board = sample_board
 
@@ -11,12 +11,12 @@ def test_board_from_csv(tmp_path, delimiter):
     csv_path.write_text(
         "\n".join(delimiter.join(str(i + 1) for i in range(9)) for _ in range(9))
     )
-    board = Board.from_csv_file(str(csv_path), delimiter=delimiter)
+    board = Grid.from_csv_file(str(csv_path), delimiter=delimiter)
     assert board.is_valid()
 
 
 def test_construct_empty():
-    empty_board = Board.construct_empty()
+    empty_board = Grid.construct_empty()
     assert len(empty_board.rows) == 9
     assert all(len(u.values) == 9 for u in empty_board.rows)
     assert empty_board.is_valid()

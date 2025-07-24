@@ -1,7 +1,7 @@
 import pytest
 
 
-from context import Board, Unit, Digit, Nine, SAMPLE_DIR
+from context import Grid, Unit, Digit, Nine, SAMPLE_DIR
 
 
 @pytest.mark.parametrize(
@@ -18,7 +18,7 @@ def test_unit_is_valid(values: Nine[Digit], expectation: bool):
 
 
 def test_board_is_valid():
-    board = Board(rows=[Unit(values=(1, 2, 3, 4, 5, 6, 7, 8, 9)) for _ in range(9)])
+    board = Grid(rows=[Unit(values=(1, 2, 3, 4, 5, 6, 7, 8, 9)) for _ in range(9)])
     assert board.is_valid()
 
 
@@ -27,7 +27,7 @@ def test_board_is_valid():
     [SAMPLE_DIR / "valid-1.csv"],
 )
 def test_csv_is_valid(path):
-    board = Board.from_csv_file(path)
+    board = Grid.from_csv_file(path)
     assert board.is_valid()
 
 
@@ -36,7 +36,7 @@ def test_csv_is_valid(path):
     [SAMPLE_DIR / "valid-1.csv"],
 )
 def test_contains_Digits(path):
-    board = Board.from_csv_file(path)
+    board = Grid.from_csv_file(path)
     for row in board.rows:
         for value in row.values:
             assert isinstance(value, int)
