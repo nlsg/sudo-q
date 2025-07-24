@@ -72,7 +72,7 @@ class Board:
 
     def solve_step(self) -> "Board":
         """unique candidate"""
-        empty_positions = list(self.iter_empty_positions())
+        empty_positions = list(self.iter_positions(0))
         for position in empty_positions:
             row, col = position
             candidates = self.get_candidates(position)
@@ -109,7 +109,7 @@ class Board:
         return board
 
     def solve_backtracking(self) -> "Board":
-        if not (position := next(self.iter_empty_positions(), None)):
+        if not (position := next(self.iter_positions(0), None)):
             return self
         for candidate in self.get_candidates(position):
             board = self.with_placement(position, candidate).solve_backtracking()
@@ -124,10 +124,10 @@ class Board:
             & self.get_box(position).get_candidates()
         )
 
-    def iter_empty_positions(self) -> Iterator[Position]:
+    def iter_positions(self, value: Digit = 0) -> Iterator[Position]:
         for row_index, unit in enumerate(self.iter_rows()):
-            for col_index, value in enumerate(unit.values):
-                if not value:
+            for col_index, val in enumerate(unit.values):
+                if val == value:
                     yield row_index, col_index
 
     def get_cell(self, position: Position) -> Digit:
@@ -182,7 +182,7 @@ class Board:
         )
 
     def __str__(self):
-        empty_cells = len(list(self.iter_empty_positions()))
+        empty_cells = len(list(self.iter_positions(0)))
 
         def format_unit(unit):
             return " ".join(
