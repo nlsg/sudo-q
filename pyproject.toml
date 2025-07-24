@@ -1,5 +1,5 @@
 [project]
-name = "sudo-q"
+name = "sudoq"
 version = "0.0.1"
 description = "API to solve and generate sudoku boards"
 readme = "README.md"
