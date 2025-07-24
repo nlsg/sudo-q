@@ -81,6 +81,8 @@ class Board:
                 return self.with_placement(position, next(iter(candidates)))
 
         for position in empty_positions:
+            row, col = position
+            candidates = self.get_candidates(position)
             # unique candidate
             box_positions = list(self.get_box_positions(position))
             for empties_set in (
