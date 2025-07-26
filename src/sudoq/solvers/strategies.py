@@ -1,6 +1,6 @@
-from typing import FrozenSet, Iterator
+from typing import FrozenSet, Iterator, Optional, Literal
 from collections import defaultdict
-from typing import Optional
+from dataclasses import dataclass
 
 import itertools
 
@@ -43,57 +43,59 @@ class HiddenSingle:
                         return grid.with_placement(position, candidate)
 
 
-class NakedPair(SolvingStrategy):
-    @staticmethod
-    def apply(grid: Grid) -> Optional[Grid]:
+@dataclass
+class NakedSubset(SolvingStrategy):
+    subset_size: Literal[2, 3]
+
+    def apply(self, grid: Grid) -> Optional[Grid]:
         for unit_positions in itertools.chain(
-            NakedPair._iter_row_positions(),
-            NakedPair._iter_col_positions(),
-            NakedPair._iter_box_positions(),
+            self._iter_row_positions(),
+            self._iter_col_positions(),
+            self._iter_box_positions(),
         ):
-            # Find all candidate pairs in this unit
-            pair_map: dict[FrozenSet[int], list[Position]] = defaultdict(list)
+            subset_map: dict[FrozenSet[int], list[Position]] = defaultdict(list)
 
             for pos in unit_positions:
-                if (
-                    len(candidates := grid.get_candidates(pos)) == 2
-                    and grid.get_cell(pos) == 0
-                ):
-                    pair_map[frozenset(candidates)].append(pos)
+                candidates = grid.get_candidates(pos)
+                if len(candidates) <= self.subset_size and grid.get_cell(pos) == 0:
+                    key = frozenset(candidates)
+                    if 1 < len(key) <= self.subset_size:
+                        subset_map[key].append(pos)
 
-            for pair, positions in pair_map.items():
-                if len(positions) != 2:
-                    continue  # only care about exactly two cells
+            for subset, positions in subset_map.items():
+                if len(subset) == len(positions) == self.subset_size:
+                    affected_positions = [
+                        pos
+                        for pos in unit_positions
+                        if pos not in positions and grid.get_cell(pos) == 0
+                    ]
 
-                # Naked pair found — eliminate pair digits from other cells in unit
-                affected_positions = [
-                    pos
-                    for pos in unit_positions
-                    if pos not in positions and grid.get_cell(pos) == 0
-                ]
-
-                for pos in affected_positions:
-                    candidates = grid.get_candidates(pos)
-                    remaining = candidates - pair
-                    if len(remaining) == 1:
-                        # This cell became solvable due to the pair elimination
-                        digit = next(iter(remaining))
-                        return grid.with_placement(pos, digit)
+                    for pos in affected_positions:
+                        candidates = grid.get_candidates(pos)
+                        remaining = candidates - subset
+                        if len(remaining) == 1:
+                            digit = next(iter(remaining))
+                            return grid.with_placement(pos, digit)
 
         return None
 
     @staticmethod
-    def _iter_row_positions() -> Iterator[Position]:
+    def _iter_row_positions() -> Iterator[list[Position]]:
         return ([(row, col) for col in range(9)] for row in range(9))
 
     @staticmethod
-    def _iter_col_positions() -> Iterator[Position]:
+    def _iter_col_positions() -> Iterator[list[Position]]:
         return ([(row, col) for row in range(9)] for col in range(9))
 
     @staticmethod
-    def _iter_box_positions() -> Iterator[Position]:
+    def _iter_box_positions() -> Iterator[list[Position]]:
         return (
             [(r + dr, c + dc) for dr in range(3) for dc in range(3)]
             for r in (0, 3, 6)
             for c in (0, 3, 6)
         )
+
+
+NakedPair = NakedSubset(2)
+
+NakedTriple = NakedSubset(3)
