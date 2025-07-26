@@ -14,7 +14,7 @@ def test_StrategicSolver(sample_board, solved_sample_board):
 def test_solve_against_backtracking(sample_board):
     assert solvers.StrategicSolver().solve(
         sample_board
-    ) == solvers.BacktrackingSolver.solve(sample_board)
+    ) == solvers.BacktrackingSolver().solve(sample_board)
 
 
 @pytest.mark.parametrize(
@@ -47,7 +47,7 @@ def test_unsolvable():
 def test_solve_backtracking(path: Path, solved_path: Path):
     grid = Grid.from_csv_file(str(path))
     solved = Grid.from_csv_file(str(solved_path))
-    assert solvers.BacktrackingSolver.solve(grid) == solved
+    assert solvers.BacktrackingSolver().solve(grid) == solved
 
 
 def test_naked_pair():

@@ -24,12 +24,11 @@ class StrategicSolver(Solver):
 
 
 class BacktrackingSolver(Solver):
-    @staticmethod
-    def solve(grid: Grid) -> Grid:
+    def solve(self, grid: Grid) -> Grid:
         if not (position := next(grid.iter_positions(0), None)):
             return grid
         for candidate in grid.get_candidates(position):
-            board = BacktrackingSolver.solve(grid.with_placement(position, candidate))
-            if board.is_complete():
+            board = BacktrackingSolver().solve(grid.with_placement(position, candidate))
+            if board.is_solved():
                 return board
         return grid
