@@ -48,7 +48,7 @@ class Grid:
             return position
 
         while True:
-            if next_puzzle.solve() is None and not next_puzzle.is_solved():
+            if next_puzzle.solve() is None and not next_puzzle.is_complete():
                 return puzzle
             puzzle = next_puzzle
             next_puzzle = puzzle.with_placement(get_random_position(), 0)
@@ -116,7 +116,7 @@ class Grid:
     def is_valid(self) -> bool:
         return all(u.is_valid() for u in self.rows)
 
-    def is_solved(self) -> bool:
+    def is_complete(self) -> bool:
         return all(unit.is_complete() for unit in self.rows)
 
     def __eq__(self, other: "Grid"):

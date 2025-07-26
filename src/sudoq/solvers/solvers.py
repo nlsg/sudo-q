@@ -13,7 +13,7 @@ class StrategicSolver(Solver):
     )
 
     def solve(self, grid: Grid) -> Grid:
-        while not grid.is_solved():
+        while not grid.is_complete():
             for strategy in self.strategies:
                 if updated_gird := strategy.apply(grid):
                     grid = updated_gird
@@ -30,6 +30,6 @@ class BacktrackingSolver(Solver):
             return grid
         for candidate in grid.get_candidates(position):
             board = BacktrackingSolver.solve(grid.with_placement(position, candidate))
-            if board.is_solved():
+            if board.is_complete():
                 return board
         return grid

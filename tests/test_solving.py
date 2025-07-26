@@ -32,7 +32,7 @@ def test_strategies(strategy, sample_board, solved_sample_board):
 
 
 def test_unsolvable():
-    assert not solvers.StrategicSolver().solve(Grid.construct_empty()).is_solved()
+    assert not solvers.StrategicSolver().solve(Grid.construct_empty()).is_complete()
 
 
 @pytest.mark.parametrize(
