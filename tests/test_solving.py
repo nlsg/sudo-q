@@ -22,6 +22,7 @@ def test_solve_against_backtracking(sample_board):
     (
         solvers.strategies.HiddenSingle,
         solvers.strategies.NakedSingle,
+        solvers.strategies.NakedPair,
     ),
 )
 def test_strategies(strategy, sample_board, solved_sample_board):
