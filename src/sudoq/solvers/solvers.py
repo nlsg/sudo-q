@@ -1,9 +1,12 @@
-from typing import Sequence
+from typing import Sequence, Callable, Iterator, TypeVar
 from dataclasses import dataclass, field
 
 from ..grid import Grid
 from .protocols import Solver, SolvingStrategy
 from .strategies import NakedSingle, HiddenSingle
+
+
+T = TypeVar("T")
 
 
 @dataclass
@@ -23,9 +26,12 @@ class StrategicSolver(Solver):
         return grid
 
 
+@dataclass
 class BacktrackingSolver(Solver):
+    position_chooser: Callable[[Iterator[T]], T] = next
+
     def solve(self, grid: Grid) -> Grid:
-        if not (position := next(grid.iter_positions(0), None)):
+        if not (position := self.position_chooser(grid.iter_positions(0), None)):
             return grid
         for candidate in grid.get_candidates(position):
             board = BacktrackingSolver().solve(grid.with_placement(position, candidate))
