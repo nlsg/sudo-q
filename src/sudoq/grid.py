@@ -136,10 +136,3 @@ class Grid:
                 enumerate(format_unit(u) for u in self.rows),
             )
         )
-
-
-if __name__ == "__main__":
-    while True:
-        print(puzzle := Grid.construct_empty().generate_puzzle())
-        print(puzzle.solve())
-        input("next?")
