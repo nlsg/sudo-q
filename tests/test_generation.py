@@ -13,4 +13,3 @@ def test_generate_easy_puzzle():
     assert puzzle.is_valid()
     assert not puzzle.is_complete()
     assert solvers.BacktrackingSolver().solve(puzzle).is_complete()
-    print(puzzle)
