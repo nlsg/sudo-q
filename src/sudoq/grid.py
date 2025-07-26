@@ -56,7 +56,7 @@ class Grid:
             rows=(list(self.rows[:row]) + [changed_unit] + list(self.rows[row + 1 :]))
         )
 
-    def solve_step(self) -> "Grid":
+    def solve_step(self) -> Optional["Grid"]:
         """unique candidate"""
         empty_positions = list(self.iter_positions(0))
         for position in empty_positions:
@@ -83,13 +83,10 @@ class Grid:
                     ):
                         return self.with_placement(position, candidate)
 
-        return self
-
     def solve(self) -> Optional["Grid"]:
         board = self
         while not board.is_solved():
-            next_board = board.solve_step()
-            if next_board == board:
+            if not (next_board := board.solve_step()):
                 return None
             board = next_board
         return board
