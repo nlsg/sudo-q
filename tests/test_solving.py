@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 
-from context import Grid, SAMPLE_DIR, sample_board
+from context import Grid, SAMPLE_DIR, sample_board, solvers
 
 sample_board = sample_board
 
@@ -32,9 +32,9 @@ def test_with_placement(sample_board):
     ),
 )
 def test_solve(path: Path, solved_path: Path):
-    board = Grid.from_csv_file(str(path))
+    grid = Grid.from_csv_file(str(path))
     solved = Grid.from_csv_file(str(solved_path))
-    assert board.solve() == solved
+    assert solvers.StrategicSolver().solve(grid) == solved
 
 
 @pytest.mark.parametrize(
@@ -42,13 +42,14 @@ def test_solve(path: Path, solved_path: Path):
     (SAMPLE_DIR / "valid-1.csv",),
 )
 def test_solve_against_backtracking(path: Path):
-    board = Grid.from_csv_file(str(path))
-    solved = board.solve()
-    assert solved == board.solve_backtracking()
+    grid = Grid.from_csv_file(str(path))
+    assert solvers.StrategicSolver().solve(grid) == solvers.BacktrackingSolver.solve(
+        grid
+    )
 
 
 def test_unsolvable():
-    assert Grid.construct_empty().solve() is None
+    assert not solvers.StrategicSolver().solve(Grid.construct_empty()).is_solved()
 
 
 @pytest.mark.parametrize(
@@ -61,6 +62,6 @@ def test_unsolvable():
     ),
 )
 def test_solve_backtracking(path: Path, solved_path: Path):
-    board = Grid.from_csv_file(str(path))
+    grid = Grid.from_csv_file(str(path))
     solved = Grid.from_csv_file(str(solved_path))
-    assert board.solve_backtracking() == solved
+    assert solvers.BacktrackingSolver.solve(grid) == solved

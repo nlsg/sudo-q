@@ -1,4 +1,4 @@
-from typing import Iterator, get_args, Optional
+from typing import Iterator, get_args
 from dataclasses import dataclass
 import random
 
@@ -55,50 +55,6 @@ class Grid:
         return Grid(
             rows=(list(self.rows[:row]) + [changed_unit] + list(self.rows[row + 1 :]))
         )
-
-    def solve_step(self) -> Optional["Grid"]:
-        """unique candidate"""
-        empty_positions = list(self.iter_positions(0))
-        for position in empty_positions:
-            row, col = position
-            candidates = self.get_candidates(position)
-            # sole candidate
-            if len(candidates) == 1:
-                return self.with_placement(position, next(iter(candidates)))
-
-        for position in empty_positions:
-            row, col = position
-            candidates = self.get_candidates(position)
-            # unique candidate
-            box_positions = list(self.get_box_positions(position))
-            for empties_set in (
-                (p for p in empty_positions if p[0] == row and p[1] != col),
-                (p for p in empty_positions if p[0] != row and p[1] == col),
-                (p for p in empty_positions if p != position and p in box_positions),
-            ):
-                empties_set = list(empties_set)
-                for candidate in candidates:
-                    if not any(
-                        candidate in self.get_candidates(pos) for pos in empties_set
-                    ):
-                        return self.with_placement(position, candidate)
-
-    def solve(self) -> Optional["Grid"]:
-        board = self
-        while not board.is_solved():
-            if not (next_board := board.solve_step()):
-                return None
-            board = next_board
-        return board
-
-    def solve_backtracking(self) -> "Grid":
-        if not (position := next(self.iter_positions(0), None)):
-            return self
-        for candidate in self.get_candidates(position):
-            board = self.with_placement(position, candidate).solve_backtracking()
-            if board.is_solved():
-                return board
-        return self
 
     def get_candidates(self, position: Position) -> set[Digit]:
         return (
