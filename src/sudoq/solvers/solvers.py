@@ -35,6 +35,6 @@ class BacktrackingSolver(Solver):
             return grid
         for candidate in grid.get_candidates(position):
             board = BacktrackingSolver().solve(grid.with_placement(position, candidate))
-            if board.is_solved():
+            if board.is_complete():
                 return board
         return grid
