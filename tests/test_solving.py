@@ -1,25 +1,10 @@
 import pytest
 from pathlib import Path
 
-from context import Grid, SAMPLE_DIR, sample_board, solvers
+from context import Grid, SAMPLE_DIR, sample_board, solved_sample_board, solvers
 
 sample_board = sample_board
-
-
-def test_get_cell(sample_board):
-    assert sample_board.get_cell((0, 0)) == 7
-    assert sample_board.get_cell((4, 4)) == 5
-    assert sample_board.get_cell((8, 8)) == 9
-
-
-def test_with_placement(sample_board):
-    for position, value in (
-        ((8, 7), 7),
-        ((2, 2), 6),
-        ((1, 8), 7),
-    ):
-        board = sample_board.with_placement(position, value)
-        assert board.get_cell(position) == value
+solved_sample_board = solved_sample_board
 
 
 @pytest.mark.parametrize(
@@ -45,6 +30,20 @@ def test_solve_against_backtracking(path: Path):
     grid = Grid.from_csv_file(str(path))
     assert solvers.StrategicSolver().solve(grid) == solvers.BacktrackingSolver.solve(
         grid
+    )
+
+
+@pytest.mark.parametrize(
+    ("strategy"),
+    (
+        solvers.strategies.HiddenSingle,
+        solvers.strategies.NakedSingle,
+    ),
+)
+def test_strategies(strategy, sample_board, solved_sample_board):
+    assert (
+        solvers.StrategicSolver(strategies=(strategy,)).solve(sample_board)
+        == solved_sample_board
     )
 
 

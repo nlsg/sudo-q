@@ -1,7 +1,9 @@
 import pytest
 from pathlib import Path
 
-from context import Grid, SAMPLE_DIR, Nine, Position, Digit
+from context import Grid, SAMPLE_DIR, Nine, Position, Digit, sample_board
+
+sample_board = sample_board
 
 
 def iter_offsets():
@@ -17,6 +19,22 @@ def get_lines_of_csv(path: str) -> list[list[int]]:
             for line in fp.readlines()
             if (sanitized_line := line.strip("\n "))
         ]
+
+
+def test_get_cell(sample_board):
+    assert sample_board.get_cell((0, 0)) == 7
+    assert sample_board.get_cell((4, 4)) == 5
+    assert sample_board.get_cell((8, 8)) == 9
+
+
+def test_with_placement(sample_board):
+    for position, value in (
+        ((8, 7), 7),
+        ((2, 2), 6),
+        ((1, 8), 7),
+    ):
+        board = sample_board.with_placement(position, value)
+        assert board.get_cell(position) == value
 
 
 @pytest.mark.parametrize("path", (SAMPLE_DIR / "valid-1.csv",))
