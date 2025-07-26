@@ -1,4 +1,4 @@
-from typing import Iterator, get_args
+from typing import Iterator, get_args, Sequence
 from dataclasses import dataclass
 import random
 
@@ -11,11 +11,17 @@ class Grid:
     rows: Nine[Unit]
 
     @classmethod
+    def from_value_matrix(cls, value_matrix: Sequence[list[Digit]]) -> "Grid":
+        if not len(value_matrix) == 9 or not len(value_matrix[0]) == 9:
+            raise ValueError("Sudoku grid has faulty shape")
+        return cls(rows=tuple(Unit(list(map(int, values))) for values in value_matrix))
+
+    @classmethod
     def from_csv_file(cls, path: str, delimiter=",") -> "Grid":
         with open(path) as csv:
-            return cls(
-                rows=tuple(
-                    Unit(list(map(int, line)))
+            return cls.from_value_matrix(
+                value_matrix=tuple(
+                    list(map(int, line))
                     for raw_line in csv.readlines()
                     if (line := raw_line.strip("\n ").split(delimiter))[0]
                 )
