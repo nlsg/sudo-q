@@ -7,30 +7,14 @@ sample_board = sample_board
 solved_sample_board = solved_sample_board
 
 
-@pytest.mark.parametrize(
-    ("path", "solved_path"),
-    (
-        (
-            (SAMPLE_DIR / "valid-1.csv"),
-            (SAMPLE_DIR / "solved-1.csv"),
-        ),
-    ),
-)
-def test_solve(path: Path, solved_path: Path):
-    grid = Grid.from_csv_file(str(path))
-    solved = Grid.from_csv_file(str(solved_path))
-    assert solvers.StrategicSolver().solve(grid) == solved
+def test_StrategicSolver(sample_board, solved_sample_board):
+    assert solvers.StrategicSolver().solve(sample_board) == solved_sample_board
 
 
-@pytest.mark.parametrize(
-    ("path"),
-    (SAMPLE_DIR / "valid-1.csv",),
-)
-def test_solve_against_backtracking(path: Path):
-    grid = Grid.from_csv_file(str(path))
-    assert solvers.StrategicSolver().solve(grid) == solvers.BacktrackingSolver.solve(
-        grid
-    )
+def test_solve_against_backtracking(sample_board):
+    assert solvers.StrategicSolver().solve(
+        sample_board
+    ) == solvers.BacktrackingSolver.solve(sample_board)
 
 
 @pytest.mark.parametrize(
