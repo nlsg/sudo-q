@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from ..grid import Grid
 from ..core import Cell
 from .protocols import Solver, SolvingStrategy
-from .strategies import NakedSingle, HiddenSingle
+from .strategies import all_strategies
 
 
 T = TypeVar("T")
@@ -13,7 +13,7 @@ T = TypeVar("T")
 @dataclass
 class StrategicSolver(Solver):
     strategies: Sequence[SolvingStrategy] = field(
-        default_factory=lambda: [NakedSingle, HiddenSingle]
+        default_factory=lambda: all_strategies
     )
 
     def solve(self, grid: Grid) -> Grid:

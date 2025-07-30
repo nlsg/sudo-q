@@ -104,3 +104,11 @@ class NakedPair(NakedSubset):
 class NakedTriple(NakedSubset):
     def __init__(self):
         super().__init__(subset_size=3)
+
+
+all_strategies = (
+    NakedSingle(),
+    HiddenSingle(),
+    NakedPair(),
+    NakedTriple(),
+)
