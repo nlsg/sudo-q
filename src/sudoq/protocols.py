@@ -1,7 +1,7 @@
 from typing import Protocol
 
-from ..grid import Grid
-from ..core import Cell
+from .grid import Grid
+from .core import Cell
 
 
 class Solver(Protocol):

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import itertools
 
-from .protocols import SolvingStrategy
+from ..protocols import SolvingStrategy
 from ..grid import Grid
 from ..core import Position, Cell
 

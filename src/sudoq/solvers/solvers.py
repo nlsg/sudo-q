@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from ..grid import Grid
 from ..core import Cell
-from .protocols import Solver, SolvingStrategy
+from ..protocols import Solver, SolvingStrategy
 from .strategies import all_strategies
 
 
