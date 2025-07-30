@@ -121,6 +121,12 @@ class Grid:
     def is_complete(self) -> bool:
         return all(unit.is_complete() for unit in self.rows)
 
+    def count_empty(self) -> int:
+        return len(list(self.iter_positions(0)))
+
+    def count_filled(self) -> int:
+        return 81 - self.count_empty()
+
     def __eq__(self, other: "Grid"):
         return isinstance(other, Grid) and all(
             own_unit == other_unit
@@ -128,8 +134,6 @@ class Grid:
         )
 
     def __str__(self):
-        empty_cells = len(list(self.iter_positions(0)))
-
         def format_unit(unit):
             return " ".join(
                 map(
@@ -138,7 +142,7 @@ class Grid:
                 )
             )
 
-        return f"Board: {empty_cells}/{81 - empty_cells}" + "\n".join(
+        return f"Board: {self.count_empty()}/{self.count_filled}" + "\n".join(
             map(
                 lambda iv: f"\n{iv[1]}" if not iv[0] % 3 else str(iv[1]),
                 enumerate(format_unit(u) for u in self.rows),
