@@ -11,6 +11,7 @@ from sudoq import (
     generators,
     Cell,
     strategies,
+    reducers,
 )
 
 TEST_DIR = Path(__file__).parent
@@ -45,4 +46,5 @@ __all__ = [
     generators,
     Cell,
     strategies,
+    reducers,
 ]
