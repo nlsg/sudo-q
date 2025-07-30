@@ -1,7 +1,7 @@
-from typing import Protocol
+from typing import Protocol, Optional
 
 from .grid import Grid
-from .core import Cell
+from .core import Cell, Position
 
 
 class Solver(Protocol):
@@ -14,3 +14,10 @@ class Solver(Protocol):
 class SolvingStrategy(Protocol):
     def get_placement(self, grid: Grid) -> Cell | None:
         """solve the grid"""
+
+
+class CellReducer(Protocol):
+    """Protocol for selecting positions to remove from grid"""
+
+    def select_position(self, grid: Grid) -> Optional[Position]:
+        """Select next position to remove"""
