@@ -15,13 +15,13 @@ class PuzzleGenerator:
     solver: Solver = field(default_factory=StrategicSolver)
     min_clues: int = 17
 
-    def fill_grid(self, grid: Grid) -> Grid:
+    def fill_grid(self, grid: Grid | None) -> Grid:
         return BacktrackingSolver(
             position_chooser=lambda position, *a: random.choice(list(position))
-        ).solve(grid)
+        ).solve(grid or Grid.construct_empty())
 
     def generate(self, grid: Grid | None = None) -> Grid:
-        next_puzzle = puzzle = self.fill_grid(grid or Grid.construct_empty())
+        next_puzzle = puzzle = self.fill_grid(grid)
 
         reducer = CompositeReducer(self.reducers)
         while next_puzzle.count_filled() > self.min_clues:

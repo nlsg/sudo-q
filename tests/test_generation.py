@@ -55,6 +55,16 @@ def test_digit_reducer():
     assert reducer.select_position(grid) is None
 
 
+@pytest.mark.parametrize("keep_count", [0, 1, 2, 9])
+def test_digit_reducer_with_keep_count(keep_count):
+    puzzle = generators.PuzzleGenerator(
+        reducers=(reducers.DigitReducer(digit=4, keep_count=keep_count),)
+    ).generate()
+
+    assert puzzle.is_valid()
+    assert puzzle.count_digit(4) == keep_count
+
+
 def test_composite_reducer():
     reducer1 = reducers.DigitReducer(digit=4, keep_count=1)
     reducer2 = reducers.RandomCellReducer()
