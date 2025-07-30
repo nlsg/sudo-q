@@ -4,6 +4,11 @@ from dataclasses import dataclass
 from .core import Digit, Nine, Index, Position
 from .unit import Unit
 
+import typing
+
+if typing.TYPE_CHECKING:
+    from pathlib import Path
+
 
 @dataclass(frozen=True)
 class Grid:
@@ -16,7 +21,7 @@ class Grid:
         return cls(rows=tuple(Unit(list(map(int, values))) for values in value_matrix))
 
     @classmethod
-    def from_csv_file(cls, path: str, delimiter=",") -> "Grid":
+    def from_csv_file(cls, path: Path | str, delimiter=",") -> "Grid":
         with open(path) as csv:
             return cls.from_value_matrix(
                 value_matrix=tuple(
