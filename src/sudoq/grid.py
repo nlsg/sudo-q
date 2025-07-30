@@ -15,10 +15,12 @@ class Grid:
     rows: Nine[Unit]
 
     @classmethod
-    def from_value_matrix(cls, value_matrix: Sequence[list[Digit]]) -> "Grid":
+    def from_value_matrix(cls, value_matrix: Sequence[Sequence[Digit]]) -> "Grid":
         if not len(value_matrix) == 9 or not len(value_matrix[0]) == 9:
             raise ValueError("Sudoku grid has faulty shape")
-        return cls(rows=tuple(Unit(list(map(int, values))) for values in value_matrix))
+        return cls(
+            rows=tuple(Unit(tuple(map(int, tuple(values)))) for values in value_matrix)
+        )
 
     @classmethod
     def from_csv_file(cls, path: Union["Path", str], delimiter=",") -> "Grid":
@@ -33,15 +35,19 @@ class Grid:
 
     @classmethod
     def construct_empty(cls) -> "Grid":
-        return cls(rows=[Unit(values=[0] * 9)] * 9)
+        return cls.from_value_matrix(((0,) * 9,) * 9)
 
     def with_placement(self, position: Position, value: Digit) -> "Grid":
         row, col = position
         changed_unit = Unit(
-            values=[value if i == col else v for i, v in enumerate(self.rows[row])]
+            values=tuple(value if i == col else v for i, v in enumerate(self.rows[row]))
         )
         return Grid(
-            rows=(list(self.rows[:row]) + [changed_unit] + list(self.rows[row + 1 :]))
+            rows=(
+                tuple(
+                    list(self.rows[:row]) + [changed_unit] + list(self.rows[row + 1 :])
+                )
+            )
         )
 
     def get_candidates(self, position: Position) -> set[Digit]:

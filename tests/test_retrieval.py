@@ -40,7 +40,7 @@ def test_with_placement(sample_board):
 @pytest.mark.parametrize("path", (SAMPLE_DIR / "valid-1.csv",))
 def test_iter_rows(path: Path):
     board = Grid.from_csv_file(str(path))
-    lines = get_lines_of_csv(str(path))
+    lines = map(tuple, get_lines_of_csv(str(path)))
     for line, unit in zip(lines, board.iter_rows()):
         assert unit.values == line
 

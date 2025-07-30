@@ -8,6 +8,23 @@ def test_generate_complete():
     assert grid.is_complete()
 
 
+def test_unique_filling():
+    amount = 3
+    assert (
+        len(
+            {
+                hash(
+                    generators.BasicPuzzleGenerator().fill_grid(
+                        grid=Grid.construct_empty()
+                    )
+                )
+                for _ in range(amount)
+            }
+        )
+        == amount
+    )
+
+
 def test_generate_easy_puzzle():
     puzzle = generators.BasicPuzzleGenerator().generate()
     assert puzzle.is_valid()
