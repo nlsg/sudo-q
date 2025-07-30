@@ -24,6 +24,34 @@ def test_board_from_values(sample_board):
     )
 
 
+def test_grid_from_string():
+    grid_str = """
+        530070000
+        600195000
+        098000060
+        800060003
+        400803001
+        700020006
+        060000280
+        000419005
+        000080079
+    """
+
+    grid = Grid.from_string(grid_str)
+    assert grid.get_cell((0, 0)) == 5
+    assert grid.get_cell((0, 1)) == 3
+    assert grid.get_cell((1, 3)) == 1
+    assert grid.get_cell((0, 5)) == 0
+    with pytest.raises(ValueError):
+        Grid.from_string("invalid")
+    with pytest.raises(ValueError):
+        Grid.from_string("123" * 20)
+    grid_str_with_dots = "5.....123" * 9
+    grid = Grid.from_string(grid_str_with_dots)
+    assert grid.get_cell((0, 0)) == 5
+    assert grid.get_cell((0, 1)) == 0  # dot converted to 0
+
+
 @pytest.mark.parametrize("path", ((SAMPLE_DIR / "valid-1.csv"),))
 def test_board_from_csv(path, sample_board):
     assert Grid.from_csv_file(str(path), delimiter=",") == sample_board

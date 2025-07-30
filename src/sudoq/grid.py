@@ -34,6 +34,17 @@ class Grid:
             )
 
     @classmethod
+    def from_string(cls, grid_string: str) -> "Grid":
+        clean = "".join(c if c != "." else "0" for c in grid_string if c not in " \n\t")
+
+        if len(clean) != 81:
+            raise ValueError("Grid string must contain exactly 81 digits")
+
+        return cls.from_value_matrix(
+            tuple(tuple(tuple(clean[i : i + 9]) for i in range(0, 81, 9)))
+        )
+
+    @classmethod
     def construct_empty(cls) -> "Grid":
         return cls.from_value_matrix(((0,) * 9,) * 9)
 
