@@ -1,4 +1,4 @@
-from typing import Iterator, get_args, Sequence, Union
+from typing import Callable, Iterator, get_args, Sequence, Union
 from dataclasses import dataclass
 
 from .core import Cell, Digit, Nine, Index, Position
@@ -71,10 +71,14 @@ class Grid:
             & self.get_box(position).get_candidates()
         )
 
-    def iter_positions(self, value: Digit = 0) -> Iterator[Position]:
+    def iter_positions(
+        self, value_or_predicate: Union[Digit, Callable[[Digit], bool]] = 0
+    ) -> Iterator[Position]:
         for row_index, unit in enumerate(self.iter_rows()):
             for col_index, val in enumerate(unit):
-                if val == value:
+                if (
+                    callable(value_or_predicate) and value_or_predicate(val)
+                ) or val == value_or_predicate:
                     yield row_index, col_index
 
     def get_cell(self, position: Position) -> Digit:
