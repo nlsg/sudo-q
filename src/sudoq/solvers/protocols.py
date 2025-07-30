@@ -1,6 +1,7 @@
 from typing import Protocol
 
 from ..grid import Grid
+from ..core import Cell
 
 
 class Solver(Protocol):
@@ -11,5 +12,5 @@ class Solver(Protocol):
 
 
 class SolvingStrategy(Protocol):
-    def apply(self, grid: Grid) -> Grid | None:
+    def apply(self, grid: Grid) -> Cell | None:
         """solve the grid"""

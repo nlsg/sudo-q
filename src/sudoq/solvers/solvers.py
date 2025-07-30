@@ -19,8 +19,8 @@ class StrategicSolver(Solver):
     def solve(self, grid: Grid) -> Grid:
         while not grid.is_complete():
             for strategy in self.strategies:
-                if updated_gird := strategy.apply(grid):
-                    grid = updated_gird
+                if updated_cell := strategy.apply(grid):
+                    grid = grid.with_placement(updated_cell)
                     break
             else:
                 return grid

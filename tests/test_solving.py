@@ -8,6 +8,7 @@ from context import (
     solved_sample_board,
     solvable_grid,
     solvers,
+    Cell,
 )
 
 sample_board = sample_board
@@ -69,10 +70,11 @@ def test_naked_pair():
 
     grid = Grid.from_value_matrix(grid_values)
 
-    result = solvers.NakedPair().apply(grid)
-
+    cell = solvers.NakedPair().apply(grid)
+    result = grid.with_placement(cell)
     assert result is not None
     assert result.get_cell((1, 0)) == 8
+    assert cell == Cell(position=(1, 0), value=8)
 
 
 # def test_naked_triple():

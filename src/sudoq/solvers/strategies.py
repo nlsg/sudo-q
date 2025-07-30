@@ -18,9 +18,7 @@ class NakedSingle(SolvingStrategy):
             candidates = grid.get_candidates(position)
             # sole candidate
             if len(candidates) == 1:
-                return grid.with_placement(
-                    Cell(position=position, value=next(iter(candidates)))
-                )
+                return Cell(position=position, value=next(iter(candidates)))
 
 
 class HiddenSingle:
@@ -42,16 +40,14 @@ class HiddenSingle:
                     if not any(
                         candidate in grid.get_candidates(pos) for pos in empties_set
                     ):
-                        return grid.with_placement(
-                            Cell(position=position, value=candidate)
-                        )
+                        return Cell(position=position, value=candidate)
 
 
 @dataclass
 class NakedSubset(SolvingStrategy):
     subset_size: Literal[2, 3]
 
-    def apply(self, grid: Grid) -> Optional[Grid]:
+    def apply(self, grid: Grid) -> Optional[Cell]:
         for unit_positions in itertools.chain(
             self._iter_row_positions(),
             self._iter_col_positions(),
@@ -79,7 +75,7 @@ class NakedSubset(SolvingStrategy):
                         remaining = candidates - subset
                         if len(remaining) == 1:
                             digit = next(iter(remaining))
-                            return grid.with_placement(Cell(position=pos, value=digit))
+                            return Cell(position=pos, value=digit)
 
         return None
 
