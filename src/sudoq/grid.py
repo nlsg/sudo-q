@@ -146,7 +146,7 @@ class Grid:
                 )
             )
 
-        return f"Board: {self.count_empty()}/{self.count_filled}" + "\n".join(
+        return f"Board: {self.count_empty()}/{self.count_filled()}" + "\n".join(
             map(
                 lambda iv: f"\n{iv[1]}" if not iv[0] % 3 else str(iv[1]),
                 enumerate(format_unit(u) for u in self.rows),
