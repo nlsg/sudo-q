@@ -1,5 +1,8 @@
-from .generators import BasicPuzzleGenerator
+from .generators import PuzzleGenerator
+from .reducers import DigitReducer, RandomCellReducer
 
 __all__ = [
-    BasicPuzzleGenerator,
+    PuzzleGenerator,
+    DigitReducer,
+    RandomCellReducer,
 ]
