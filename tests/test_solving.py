@@ -1,20 +1,28 @@
 import pytest
 from pathlib import Path
 
-from context import Grid, SAMPLE_DIR, sample_board, solved_sample_board, solvers
+from context import (
+    Grid,
+    SAMPLE_DIR,
+    sample_board,
+    solved_sample_board,
+    solvable_grid,
+    solvers,
+)
 
 sample_board = sample_board
 solved_sample_board = solved_sample_board
+solvable_grid = solvable_grid
 
 
 def test_StrategicSolver(sample_board, solved_sample_board):
     assert solvers.StrategicSolver().solve(sample_board) == solved_sample_board
 
 
-def test_solve_against_backtracking(sample_board):
+def test_solve_against_backtracking(solvable_grid):
     assert solvers.StrategicSolver().solve(
-        sample_board
-    ) == solvers.BacktrackingSolver().solve(sample_board)
+        solvable_grid
+    ) == solvers.BacktrackingSolver().solve(solvable_grid)
 
 
 @pytest.mark.parametrize(
