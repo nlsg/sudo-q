@@ -12,5 +12,5 @@ class Solver(Protocol):
 
 
 class SolvingStrategy(Protocol):
-    def apply(self, grid: Grid) -> Cell | None:
+    def get_placement(self, grid: Grid) -> Cell | None:
         """solve the grid"""

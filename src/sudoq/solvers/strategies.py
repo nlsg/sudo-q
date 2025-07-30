@@ -11,7 +11,7 @@ from ..core import Position, Cell
 
 class NakedSingle(SolvingStrategy):
     @staticmethod
-    def apply(grid: Grid) -> Grid | None:
+    def get_placement(grid: Grid) -> Grid | None:
         """unique candidate"""
         for position in grid.iter_positions(0):
             row, col = position
@@ -21,9 +21,9 @@ class NakedSingle(SolvingStrategy):
                 return Cell(position=position, value=next(iter(candidates)))
 
 
-class HiddenSingle:
+class HiddenSingle(SolvingStrategy):
     @staticmethod
-    def apply(grid: Grid) -> Grid | None:
+    def get_placement(grid: Grid) -> Grid | None:
         empty_positions = list(grid.iter_positions(0))
         for position in empty_positions:
             row, col = position
@@ -47,7 +47,7 @@ class HiddenSingle:
 class NakedSubset(SolvingStrategy):
     subset_size: Literal[2, 3]
 
-    def apply(self, grid: Grid) -> Optional[Cell]:
+    def get_placement(self, grid: Grid) -> Optional[Cell]:
         for unit_positions in itertools.chain(
             self._iter_row_positions(),
             self._iter_col_positions(),

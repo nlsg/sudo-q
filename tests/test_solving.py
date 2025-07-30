@@ -70,7 +70,7 @@ def test_naked_pair():
 
     grid = Grid.from_value_matrix(grid_values)
 
-    cell = solvers.NakedPair().apply(grid)
+    cell = solvers.NakedPair().get_placement(grid)
     result = grid.with_placement(cell)
     assert result is not None
     assert result.get_cell((1, 0)) == 8
