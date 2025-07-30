@@ -1,4 +1,3 @@
-# Python-generated files
 __pycache__/
 *.py[oc]
 build/
@@ -7,6 +6,5 @@ wheels/
 *.egg-info
 .pytest_cache
 .ruff_cache
-
-# Virtual environments
 .venv
+.coverage
