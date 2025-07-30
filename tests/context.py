@@ -1,7 +1,17 @@
 import pytest
 from pathlib import Path
 
-from sudoq import Grid, Unit, Digit, Nine, Position, solvers, generators, Cell
+from sudoq import (
+    Grid,
+    Unit,
+    Digit,
+    Nine,
+    Position,
+    solvers,
+    generators,
+    Cell,
+    strategies,
+)
 
 TEST_DIR = Path(__file__).parent
 SAMPLE_DIR = TEST_DIR / "assets" / "samples"
@@ -24,4 +34,15 @@ def solved_sample_board():
     )
 
 
-__all__ = [Grid, Unit, Digit, Nine, TEST_DIR, Position, solvers, generators, Cell]
+__all__ = [
+    Grid,
+    Unit,
+    Digit,
+    Nine,
+    TEST_DIR,
+    Position,
+    solvers,
+    generators,
+    Cell,
+    strategies,
+]

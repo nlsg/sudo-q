@@ -9,6 +9,7 @@ from context import (
     solvable_grid,
     solvers,
     Cell,
+    strategies,
 )
 
 sample_board = sample_board
@@ -29,8 +30,8 @@ def test_solve_against_backtracking(solvable_grid):
 @pytest.mark.parametrize(
     ("strategy"),
     (
-        solvers.strategies.HiddenSingle,
-        solvers.strategies.NakedSingle,
+        strategies.HiddenSingle,
+        strategies.NakedSingle,
     ),
 )
 def test_strategies(strategy, sample_board, solved_sample_board):
@@ -70,7 +71,7 @@ def test_naked_pair():
 
     grid = Grid.from_value_matrix(grid_values)
 
-    cell = solvers.NakedPair().get_placement(grid)
+    cell = strategies.NakedPair().get_placement(grid)
     result = grid.with_placement(cell)
     assert result is not None
     assert result.get_cell((1, 0)) == 8

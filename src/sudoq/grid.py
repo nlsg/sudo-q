@@ -16,11 +16,12 @@ class Grid:
 
     @classmethod
     def from_value_matrix(cls, value_matrix: Sequence[Sequence[Digit]]) -> "Grid":
-        if not len(value_matrix) == 9 or not len(value_matrix[0]) == 9:
-            raise ValueError("Sudoku grid has faulty shape")
-        return cls(
+        grid = cls(
             rows=tuple(Unit(tuple(map(int, tuple(values)))) for values in value_matrix)
         )
+        if len(grid.rows) != 9 or not all(len(unit.values) == 9 for unit in grid.rows):
+            raise ValueError("Sudoku grid has faulty shape")
+        return grid
 
     @classmethod
     def from_csv_file(cls, path: Union["Path", str], delimiter=",") -> "Grid":
