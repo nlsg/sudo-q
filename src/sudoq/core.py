@@ -20,6 +20,3 @@ class Cell:
 
     def is_empty(self) -> bool:
         return self.value == 0
-
-    def with_value(self, value: Digit) -> "Cell":
-        return Cell(value=value, candidates=self.candidates)
