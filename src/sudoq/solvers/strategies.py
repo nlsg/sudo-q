@@ -96,6 +96,11 @@ class NakedSubset(SolvingStrategy):
         )
 
 
-NakedPair = NakedSubset(2)
+class NakedPair(NakedSubset):
+    def __init__(self):
+        super().__init__(subset_size=2)
 
-NakedTriple = NakedSubset(3)
+
+class NakedTriple(NakedSubset):
+    def __init__(self):
+        super().__init__(subset_size=3)
