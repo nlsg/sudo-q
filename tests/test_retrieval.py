@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 
-from context import Grid, SAMPLE_DIR, Nine, Position, Digit, sample_board
+from context import Grid, SAMPLE_DIR, Nine, Position, Digit, sample_board, Cell
 
 sample_board = sample_board
 
@@ -33,7 +33,7 @@ def test_with_placement(sample_board):
         ((2, 2), 6),
         ((1, 8), 7),
     ):
-        board = sample_board.with_placement(position, value)
+        board = sample_board.with_placement(Cell(position=position, value=value))
         assert board.get_cell(position) == value
 
 

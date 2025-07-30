@@ -2,6 +2,7 @@ from typing import Sequence, Callable, Iterator, TypeVar
 from dataclasses import dataclass, field
 
 from ..grid import Grid
+from ..core import Cell
 from .protocols import Solver, SolvingStrategy
 from .strategies import NakedSingle, HiddenSingle
 
@@ -34,7 +35,9 @@ class BacktrackingSolver(Solver):
         if not (position := self.position_chooser(grid.iter_positions(0), None)):
             return grid
         for candidate in grid.get_candidates(position):
-            board = BacktrackingSolver().solve(grid.with_placement(position, candidate))
+            board = BacktrackingSolver().solve(
+                grid.with_placement(Cell(position=position, value=candidate))
+            )
             if board.is_complete():
                 return board
         return grid

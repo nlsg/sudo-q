@@ -1,7 +1,7 @@
 from typing import Iterator, get_args, Sequence, Union
 from dataclasses import dataclass
 
-from .core import Digit, Nine, Index, Position
+from .core import Cell, Digit, Nine, Index, Position
 from .unit import Unit
 
 import typing
@@ -48,10 +48,12 @@ class Grid:
     def construct_empty(cls) -> "Grid":
         return cls.from_value_matrix(((0,) * 9,) * 9)
 
-    def with_placement(self, position: Position, value: Digit) -> "Grid":
-        row, col = position
+    def with_placement(self, cell: Cell) -> "Grid":
+        row, col = cell.position
         changed_unit = Unit(
-            values=tuple(value if i == col else v for i, v in enumerate(self.rows[row]))
+            values=tuple(
+                cell.value if i == col else v for i, v in enumerate(self.rows[row])
+            )
         )
         return Grid(
             rows=(

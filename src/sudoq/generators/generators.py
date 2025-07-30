@@ -2,7 +2,7 @@ from typing import Protocol, Sequence
 import random
 
 from ..grid import Grid
-from ..core import Position
+from ..core import Position, Cell
 from ..solvers import BacktrackingSolver, StrategicSolver
 from ..solvers.protocols import Solver
 
@@ -23,7 +23,10 @@ class CellReducer(Protocol):
 class RandomCellReducer(CellReducer):
     def reduce(self, grid: Grid) -> Grid:
         return grid.with_placement(
-            self._get_random_position(list(grid.iter_positions(0))), 0
+            Cell(
+                position=self._get_random_position(list(grid.iter_positions(0))),
+                value=0,
+            )
         )
 
     @staticmethod

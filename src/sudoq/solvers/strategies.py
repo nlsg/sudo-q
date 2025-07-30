@@ -6,7 +6,7 @@ import itertools
 
 from .protocols import SolvingStrategy
 from ..grid import Grid
-from ..core import Position
+from ..core import Position, Cell
 
 
 class NakedSingle(SolvingStrategy):
@@ -18,7 +18,9 @@ class NakedSingle(SolvingStrategy):
             candidates = grid.get_candidates(position)
             # sole candidate
             if len(candidates) == 1:
-                return grid.with_placement(position, next(iter(candidates)))
+                return grid.with_placement(
+                    Cell(position=position, value=next(iter(candidates)))
+                )
 
 
 class HiddenSingle:
@@ -40,7 +42,9 @@ class HiddenSingle:
                     if not any(
                         candidate in grid.get_candidates(pos) for pos in empties_set
                     ):
-                        return grid.with_placement(position, candidate)
+                        return grid.with_placement(
+                            Cell(position=position, value=candidate)
+                        )
 
 
 @dataclass
@@ -75,7 +79,7 @@ class NakedSubset(SolvingStrategy):
                         remaining = candidates - subset
                         if len(remaining) == 1:
                             digit = next(iter(remaining))
-                            return grid.with_placement(pos, digit)
+                            return grid.with_placement(Cell(position=pos, value=digit))
 
         return None
 
