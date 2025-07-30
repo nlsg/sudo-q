@@ -44,7 +44,7 @@ class BasicPuzzleGenerator(PuzzleGenerator):
 
     def fill_grid(self, grid: Grid) -> Grid:
         return BacktrackingSolver(
-            # position_chooser=lambda position: random.choice(list(position))
+            position_chooser=lambda position, *a: random.choice(list(position))
         ).solve(grid)
 
     def generate(self, grid: Grid | None = None) -> Grid:
