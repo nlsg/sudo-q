@@ -4,3 +4,16 @@ repos:
     hooks:
       - id: ruff
       - id: ruff-format
+  - repo: local
+    hooks:
+      - id: validate-puzzles
+        name: Validate Example Puzzles
+        entry: python .pre-commit-hooks/validate_puzzles.py
+        language: python
+        files: examples/.*\.csv$
+
+      - id: sync-versions
+        name: Sync Version Numbers
+        entry: python .pre-commit-hooks/sync_versions.py
+        language: python
+        files: pyproject\.toml
