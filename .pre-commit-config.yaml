@@ -6,6 +6,11 @@ repos:
       - id: ruff-format
   - repo: local
     hooks:
+      - id: update-documentation
+        name: Update Documentation
+        entry: .venv/bin/python .pre-commit-hooks/update_documentation.py
+        language: python
+
       - id: validate-puzzles
         name: Validate Example Puzzles
         entry: .venv/bin/python .pre-commit-hooks/validate_puzzles.py

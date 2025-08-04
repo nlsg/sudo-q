@@ -1,4 +1,4 @@
-from typing import Protocol, Optional
+from typing import Protocol, Optional, runtime_checkable
 
 from .grid import Grid
 from .core import Cell, Position
@@ -11,6 +11,7 @@ class Solver(Protocol):
         """shall always return a Grid, even if it is not solved completely"""
 
 
+@runtime_checkable
 class SolvingStrategy(Protocol):
     def get_placement(self, grid: Grid) -> Cell | None:
         """solve the grid"""
