@@ -8,9 +8,15 @@ repos:
     hooks:
       - id: validate-puzzles
         name: Validate Example Puzzles
-        entry: python .pre-commit-hooks/validate_puzzles.py
+        entry: .venv/bin/python .pre-commit-hooks/validate_puzzles.py
         language: python
-        files: examples/.*\.csv$
+        files: tests/.*\.csv$
+
+      - id: check-performance
+        name: Check Performance
+        entry: .venv/bin/python .pre-commit-hooks/check-performance.py
+        language: python
+        files: src/sudoq/solvers/.*\.py$
 
       - id: sync-versions
         name: Sync Version Numbers
