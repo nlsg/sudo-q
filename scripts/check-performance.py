@@ -11,7 +11,7 @@ def check_performance():
             repeat=3,
         )
     )
-    if time > 0.5:
+    if time > 0.01:
         print(f"Performance regression detected: {time:.2f}s")
         return 1
     return 0
