@@ -1,6 +1,6 @@
 import pytest
 
-from context import Grid, sample_board, SAMPLE_DIR
+from context import Grid, sample_board, SAMPLE_DIR, Cell
 
 sample_board = sample_board
 
@@ -91,3 +91,11 @@ def test_board_str(sample_board):
             " 1 4 6  0 8 2  0 0 9",
         )
     )
+
+
+# Cell tests
+def test_cell_is_empty():
+    cell = Cell(position=(0, 0), value=0)
+    assert cell.is_empty() is True
+    cell = Cell(position=(0, 1), value=5)
+    assert cell.is_empty() is False

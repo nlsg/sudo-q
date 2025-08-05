@@ -127,3 +127,16 @@ def test_puzzle_generator_with_input_grid():
     puzzle = generator.generate(input_grid)
     assert puzzle.is_valid()
     assert puzzle.get_cell((0, 0)) in (5, 0)  # Either kept or reduced
+
+
+def test_empty_composite_reducer():
+    grid = Grid.construct_empty()
+    assert reducers.CompositeReducer([]).select_position(grid) is None
+
+
+def test_reducing_empty_grid():
+    reducers.CompositeReducer(
+        [
+            reducers.RandomCellReducer(),
+        ]
+    ).select_position(Grid.construct_empty()) is None
