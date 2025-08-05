@@ -4,3 +4,27 @@ repos:
     hooks:
       - id: ruff
       - id: ruff-format
+  - repo: local
+    hooks:
+      - id: update-documentation
+        name: Update Documentation
+        entry: .venv/bin/python scripts/update_documentation.py
+        language: python
+
+      - id: validate-puzzles
+        name: Validate Example Puzzles
+        entry: .venv/bin/python scripts/validate_puzzles.py
+        language: python
+        files: tests/.*\.csv$
+
+      - id: check-performance
+        name: Check Performance
+        entry: .venv/bin/python scripts/check-performance.py
+        language: python
+        files: src/sudoq/solvers/.*\.py$
+
+      - id: sync-versions
+        name: Sync Version Numbers
+        entry: python scripts/sync_versions.py
+        language: python
+        files: pyproject\.toml

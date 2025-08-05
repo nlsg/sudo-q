@@ -110,6 +110,23 @@ sudo-q/
 - Backtracking solver
 - Custom strategy support
 
+<!-- START_STRATEGIES -->
+### HiddenSingle
+No description available.
+
+### NakedPair
+No description available.
+
+### NakedSingle
+No description available.
+
+### NakedSubset
+NakedSubset(subset_size: Literal[2, 3])
+
+### NakedTriple
+No description available.
+<!-- END_STRATEGIES -->
+
 ### Generators
 
 - Difficulty-based generation
