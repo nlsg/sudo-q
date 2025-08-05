@@ -112,3 +112,54 @@ def test_naked_quad():
     grid = Grid.from_value_matrix(grid_values)
     cell = strategies.NakedQuad().get_placement(grid)
     assert cell == Cell(position=(0, 1), value=2)
+
+
+def test_hidden_pair():
+    grid_string = """
+    000 000 000
+    904 607 000
+    076 804 100
+    309 701 080
+    708 000 301
+    051 308 702
+    007 502 610
+    005 403 208
+    000 000 007
+    """
+    grid = Grid.from_string(grid_string)
+    cell = strategies.HiddenPair().get_placement(grid)
+    assert cell == Cell(position=(0, 8), value=6)
+
+
+def test_hidden_triple():
+    grid_string = """
+    000 001 030
+    231 090 000
+    065 003 100
+    678 924 300
+    103 050 006
+    000 136 700
+    009 360 570
+    006 019 843
+    300 000 600
+    """
+    grid = Grid.from_string(grid_string)
+    cell = strategies.HiddenTriple().get_placement(grid)
+    assert cell == Cell(position=(0, 6), value=2)
+
+
+def test_hidden_quad():
+    grid_string = """
+    901 500 046
+    425 090 081
+    860 010 020
+    502 000 000
+    019 000 460
+    640 000 002
+    196 040 253
+    200 069 817
+    000 001 694
+    """
+    grid = Grid.from_string(grid_string)
+    cell = strategies.HiddenQuad().get_placement(grid)
+    assert cell == Cell(position=(3, 8), value=9)

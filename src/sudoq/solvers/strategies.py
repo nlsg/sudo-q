@@ -6,6 +6,7 @@ import itertools
 from ..protocols import SolvingStrategy
 from ..grid import Grid
 from ..core import Position, Cell
+from ..core import iter_unit_positions
 
 
 class NakedSingle(SolvingStrategy):
@@ -43,15 +44,59 @@ class HiddenSingle(SolvingStrategy):
 
 
 @dataclass
-class NakedSubset(SolvingStrategy):
+class HiddenSubset(SolvingStrategy):
     subset_size: Literal[2, 3]
 
     def get_placement(self, grid: Grid) -> Optional[Cell]:
-        for unit_positions in itertools.chain(
-            self._iter_row_positions(),
-            self._iter_col_positions(),
-            self._iter_box_positions(),
-        ):
+        for unit_positions in iter_unit_positions():
+            empty_positions = [pos for pos in unit_positions if grid.get_cell(pos) == 0]
+
+            all_candidates = set().union(
+                *(grid.get_candidates(pos) for pos in empty_positions)
+            )
+
+            # Check all possible candidate combinations
+            for candidates in itertools.combinations(all_candidates, self.subset_size):
+                candidates_set = set(candidates)
+
+                positions = [
+                    pos
+                    for pos in empty_positions
+                    if candidates_set & grid.get_candidates(pos)
+                ]
+
+                if len(positions) == self.subset_size:
+                    for pos in positions:
+                        candidates = grid.get_candidates(pos)
+                        to_eliminate = candidates - candidates_set
+                        if to_eliminate:
+                            remaining = candidates & candidates_set
+                            if len(remaining) == 1:
+                                return Cell(position=pos, value=next(iter(remaining)))
+        return None
+
+
+class HiddenPair(HiddenSubset):
+    def __init__(self):
+        super().__init__(subset_size=2)
+
+
+class HiddenTriple(HiddenSubset):
+    def __init__(self):
+        super().__init__(subset_size=3)
+
+
+class HiddenQuad(HiddenSubset):
+    def __init__(self):
+        super().__init__(subset_size=4)
+
+
+@dataclass
+class NakedSubset(SolvingStrategy):
+    subset_size: Literal[2, 3, 4]
+
+    def get_placement(self, grid: Grid) -> Optional[Cell]:
+        for unit_positions in iter_unit_positions():
             subset_cells = [
                 (pos, grid.get_candidates(pos))
                 for pos in unit_positions
@@ -115,7 +160,12 @@ class NakedQuad(NakedSubset):
 all_strategies = (
     NakedSingle(),
     HiddenSingle(),
+    #
     NakedPair(),
     NakedTriple(),
     NakedQuad(),
+    #
+    HiddenPair(),
+    HiddenTriple(),
+    HiddenQuad(),
 )
