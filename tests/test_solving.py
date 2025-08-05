@@ -72,41 +72,94 @@ def test_naked_pair():
     grid = Grid.from_value_matrix(grid_values)
 
     cell = strategies.NakedPair().get_placement(grid)
-    result = grid.with_placement(cell)
-    assert result is not None
-    assert result.get_cell((1, 0)) == 8
     assert cell == Cell(position=(1, 0), value=8)
 
 
-# def test_naked_triple():
-#     # from: https://www.sudokuwiki.org/naked_candidates
-#     grid_values = [
-#         [0, 7, 0, 4, 0, 8, 0, 2, 9],
-#         [0, 0, 2, 0, 0, 0, 0, 0, 4],
-#         [8, 5, 4, 0, 2, 0, 0, 0, 7],
-#         [0, 0, 8, 3, 7, 4, 2, 0, 0],
-#         [0, 2, 0, 0, 0, 0, 0, 0, 0],
-#         [0, 0, 3, 2, 6, 1, 7, 0, 0],
-#         [0, 0, 0, 0, 9, 3, 6, 1, 2],
-#         [2, 0, 0, 0, 0, 0, 4, 0, 3],
-#         [1, 3, 0, 6, 4, 2, 0, 7, 0],
-#         # [0, 0, 0, 0, 0, 0, 0, 0, 0],
-#     ]
-#     grid_values = [
-#         [2, 9, 4, 5, 1, 3, 0, 0, 6],
-#         [6, 0, 0, 8, 4, 2, 3, 1, 9],
-#         [3, 0, 0, 6, 9, 7, 2, 5, 4],
-#         [0, 0, 0, 0, 5, 6, 0, 0, 0],
-#         [0, 4, 0, 0, 8, 0, 0, 6, 0],
-#         [0, 0, 0, 4, 7, 0, 0, 0, 0],
-#         [7, 3, 0, 1, 6, 4, 0, 0, 5],
-#         [9, 0, 0, 7, 3, 5, 0, 0, 1],
-#         [4, 0, 0, 9, 2, 8, 6, 3, 7],
-#     ]
+def test_naked_triple():
+    # from: https://www.sudokuwiki.org/naked_candidates
+    grid_values = [
+        [2, 9, 4, 5, 1, 3, 0, 0, 6],
+        [6, 0, 0, 8, 4, 2, 3, 1, 9],
+        [3, 0, 0, 6, 9, 7, 2, 5, 4],
+        [0, 0, 0, 0, 5, 6, 0, 0, 0],
+        [0, 4, 0, 0, 8, 0, 0, 6, 0],
+        [0, 0, 0, 4, 7, 0, 0, 0, 0],
+        [7, 3, 0, 1, 6, 4, 0, 0, 5],
+        [9, 0, 0, 7, 3, 5, 0, 0, 1],
+        [4, 0, 0, 9, 2, 8, 6, 3, 7],
+    ]
 
-#     grid = Grid.from_value_matrix(grid_values)
+    grid = Grid.from_value_matrix(grid_values)
 
-#     result = solvers.NakedTriple.apply(grid)
+    placement = strategies.NakedTriple().get_placement(grid)
+    assert placement == Cell(position=(5, 7), value=9)
 
-#     assert result is not None
-#     assert result.get_cell((1, 0)) == 8
+
+def test_naked_quad():
+    # from: https://www.sudokuwiki.org/naked_candidates
+    grid_values = [
+        [0, 0, 0, 4, 3, 0, 0, 8, 6],
+        [0, 0, 0, 0, 2, 0, 0, 4, 0],
+        [0, 9, 0, 0, 7, 8, 5, 2, 0],
+        [3, 7, 1, 8, 5, 6, 2, 9, 4],
+        [4, 0, 0, 1, 4, 2, 3, 7, 5],
+        [4, 0, 0, 3, 9, 7, 6, 1, 8],
+        [2, 0, 0, 7, 0, 3, 8, 5, 9],
+        [0, 3, 9, 2, 0, 5, 4, 6, 7],
+        [7, 0, 0, 9, 0, 4, 1, 3, 2],
+    ]
+
+    grid = Grid.from_value_matrix(grid_values)
+    cell = strategies.NakedQuad().get_placement(grid)
+    assert cell == Cell(position=(0, 1), value=2)
+
+
+def test_hidden_pair():
+    grid_string = """
+    000 000 000
+    904 607 000
+    076 804 100
+    309 701 080
+    708 000 301
+    051 308 702
+    007 502 610
+    005 403 208
+    000 000 007
+    """
+    grid = Grid.from_string(grid_string)
+    cell = strategies.HiddenPair().get_placement(grid)
+    assert cell == Cell(position=(0, 8), value=6)
+
+
+def test_hidden_triple():
+    grid_string = """
+    000 001 030
+    231 090 000
+    065 003 100
+    678 924 300
+    103 050 006
+    000 136 700
+    009 360 570
+    006 019 843
+    300 000 600
+    """
+    grid = Grid.from_string(grid_string)
+    cell = strategies.HiddenTriple().get_placement(grid)
+    assert cell == Cell(position=(0, 6), value=2)
+
+
+def test_hidden_quad():
+    grid_string = """
+    901 500 046
+    425 090 081
+    860 010 020
+    502 000 000
+    019 000 460
+    640 000 002
+    196 040 253
+    200 069 817
+    000 001 694
+    """
+    grid = Grid.from_string(grid_string)
+    cell = strategies.HiddenQuad().get_placement(grid)
+    assert cell == Cell(position=(3, 8), value=9)

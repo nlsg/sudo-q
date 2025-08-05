@@ -97,7 +97,6 @@ def test_puzzle_generator_with_digit_reducer():
     generator = generators.PuzzleGenerator(
         reducers=[
             reducers.DigitReducer(digit=4, keep_count=1),
-            reducers.RandomCellReducer(),
         ],
         min_clues=17,
     )
