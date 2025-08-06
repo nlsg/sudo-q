@@ -33,8 +33,8 @@ uv pip install -e .
 
 ## Quick Start
 
-<!-- START_CODE_EXAMPLE -->
-<!-- END_CODE_EXAMLPE -->
+<!-- START_INJECT_CODE_EXAMPLE -->
+<!-- END_INJECT_CODE_EXAMPLE -->
 
 ## Features
 
@@ -50,7 +50,7 @@ uv pip install -e .
 - Backtracking solver
 - Custom strategy support
 
-<!-- START_STRATEGIES -->
+<!-- START_INJECTctSTRATEGIES -->
 ### HiddenPair
 No description available.
 
@@ -80,7 +80,7 @@ NakedSubset(subset_size: Literal[2, 3, 4])
 
 ### NakedTriple
 No description available.
-<!-- END_STRATEGIES -->
+<!-- END_INJECT_STRATEGIES -->
 
 ### Generators
 
