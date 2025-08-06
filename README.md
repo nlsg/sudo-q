@@ -36,9 +36,7 @@ uv pip install -e .
 <!-- START_INJECT_CODE_EXAMPLE -->
 ```python
 from sudoq import Grid, solvers, strategies
-
 from pathlib import Path
-
 
 # load a grid from:
 # - nested-sequence
@@ -48,8 +46,6 @@ Grid.from_value_matrix((range(9) for _ in range(9))).is_valid()  # False
 Grid.from_csv_file(Path("tests", "assets", "samples", "hard-1.csv"), delimiter=",")
 
 # - a string
-
-
 puzzle = Grid.from_string("""
     530 070 000
     600 195 000
@@ -62,7 +58,7 @@ puzzle = Grid.from_string("""
     000 080 079
 """)
 
-# Solve it with a solver!
+# Solving a grid
 solver = solvers.StrategicSolver()
 solution = solver.solve(puzzle)
 solution.is_valid()  # True - basic rules are satisfied
@@ -72,6 +68,8 @@ print(solution)
 
 brute_forced_solution = solvers.BacktrackingSolver().solve(puzzle)
 
+
+# test solving strategies
 
 if move := strategies.NakedPair().get_placement(puzzle):
     print(f"Naked-pair found: {move}")
