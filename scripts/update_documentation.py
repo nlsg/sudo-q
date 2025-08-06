@@ -22,7 +22,7 @@ def inject_into_readme(marker: str, content: str):
 
 def inject_code_examples():
     example_code = Path("examples", "solving.py").read_text()
-    example_code = f"```python\n{example_code}\n```"
+    example_code = "\n".join(("```python", example_code, "```"))
     return inject_into_readme(
         marker="CODE_EXAMPLE",
         content=example_code,

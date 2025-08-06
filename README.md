@@ -62,13 +62,15 @@ puzzle = Grid.from_string("""
     000 080 079
 """)
 
-# Solve it!
+# Solve it with a solver!
 solver = solvers.StrategicSolver()
 solution = solver.solve(puzzle)
 solution.is_valid()  # True - basic rules are satisfied
 solution.is_complete()  # True - all cells are filled
 print(puzzle)
 print(solution)
+
+brute_forced_solution = solvers.BacktrackingSolver().solve(puzzle)
 
 
 if move := strategies.NakedPair().get_placement(puzzle):
@@ -77,21 +79,20 @@ if move := strategies.NakedPair().get_placement(puzzle):
 print(puzzle)
 while not puzzle.is_complete():
     for strategy in strategies.all_strategies:
-        if placement := strategy.get_placement(puzzle):
-            if (
-                input(
-                    f"{strategy.__class__.__name__} applicable: {placement}
- Apply? [Y]es "
-                )
-                .lower()
-                .startswith("y")
-            ):
-                puzzle = puzzle.with_placement(placement)
-                print("grid updated!")
-                print(puzzle)
-    else:
-        print("No more strategies applicable, exiting.")
-        break
+        if not (placement := strategy.get_placement(puzzle)):
+            print("No more strategies applicable, exiting.")
+            break
+        if not (
+            input(
+                f"{strategy.__class__.__name__} applicable: {placement}.. Apply? [Y]es "
+            )
+            .lower()
+            .startswith("y")
+        ):
+            continue
+        puzzle = puzzle.with_placement(placement)
+        print("grid updated!")
+        print(puzzle)
 
 ```<!-- END_INJECT_CODE_EXAMPLE -->
 
@@ -162,6 +163,7 @@ install pre-commit hooks:
 ```sh
 pre-commit install
 ```
+
 ```sh
 # Run tests
 pytest
@@ -175,7 +177,6 @@ ruff format .
 # Run linter
 ruff check .
 ```
-
 
 ## License
 
