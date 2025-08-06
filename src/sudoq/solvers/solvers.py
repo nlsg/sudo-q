@@ -12,6 +12,12 @@ T = TypeVar("T")
 
 @dataclass
 class StrategicSolver(Solver):
+    """A solver that applies a sequence of strategies to resolve placements of the grid,
+    until no more strategies are applicable or the grid is complete.
+
+    In turns, each strategy applies exactly one placement to the grid, not until it is exhausted.
+    """
+
     strategies: Sequence[SolvingStrategy] = field(
         default_factory=lambda: all_strategies
     )
@@ -29,6 +35,8 @@ class StrategicSolver(Solver):
 
 @dataclass
 class BacktrackingSolver(Solver):
+    """A solver that uses backtracking to find a solution for the grid."""
+
     position_chooser: Callable[[Iterator[T]], T] = next
 
     def solve(self, grid: Grid) -> Grid:
