@@ -4,7 +4,32 @@ import re
 from sudoq.solvers import strategies
 
 
-def inject_available_strategies():
+def inject_into_readme(marker: str, content: str):
+    readme = Path("README.md")
+    # Insert between markers
+    start_marker = f"<!-- START_INJECT_{marker} -->"
+    end_marker = f"<!-- END_INJECT_{marker} -->"
+    updated = re.sub(
+        rf"{start_marker}.*{end_marker}",
+        f"{start_marker}\n" + content + f"{end_marker}",
+        readme.read_text(),
+        flags=re.DOTALL,
+    )
+    if updated:
+        readme.write_text(updated)
+        return True
+
+
+def inject_code_examples():
+    example_code = Path("examples", "solving.py").read_text()
+    example_code = f"```python\n{example_code}\n```"
+    return inject_into_readme(
+        marker="CODE_EXAMPLE",
+        content=example_code,
+    )
+
+
+def inject_strategies():
     strategy_classes = [
         cls
         for _, cls in inspect.getmembers(strategies, inspect.isclass)
@@ -17,19 +42,11 @@ def inject_available_strategies():
         docs.append(f"### {strategy.__name__}")
         docs.append(f"{strategy.__doc__ or 'No description available.'}\n")
 
-    readme = Path("README.md")
-    content = readme.read_text()
-    # Insert between markers
-    updated = re.sub(
-        r"<!-- START_INJECT_STRATEGIES_DOCUMENTATION -->.*<!-- END_INJECT_STRATEGIES_DOCUMENTATION -->",
-        "<!-- START_INJECT_STRATEGIES_DOCUMENTATION -->\n"
-        + "\n".join(docs)
-        + "<!-- END_INJECT_STRATEGIES_DOCUMENTATION -->",
-        content,
-        flags=re.DOTALL,
+    return inject_into_readme(
+        marker="STRATEGIES",
+        content="\n".join(docs),
     )
-    readme.write_text(updated)
 
 
 if __name__ == "__main__":
-    inject_available_strategies()
+    exit(0 if (inject_code_examples() and inject_strategies()) else 1)
