@@ -21,8 +21,10 @@ def inject_available_strategies():
     content = readme.read_text()
     # Insert between markers
     updated = re.sub(
-        r"<!-- START_STRATEGIES -->.*<!-- END_STRATEGIES -->",
-        "<!-- START_STRATEGIES -->\n" + "\n".join(docs) + "<!-- END_STRATEGIES -->",
+        r"<!-- START_INJECT_STRATEGIES_DOCUMENTATION -->.*<!-- END_INJECT_STRATEGIES_DOCUMENTATION -->",
+        "<!-- START_INJECT_STRATEGIES_DOCUMENTATION -->\n"
+        + "\n".join(docs)
+        + "<!-- END_INJECT_STRATEGIES_DOCUMENTATION -->",
         content,
         flags=re.DOTALL,
     )

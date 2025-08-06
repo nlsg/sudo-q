@@ -110,22 +110,37 @@ sudo-q/
 - Backtracking solver
 - Custom strategy support
 
-<!-- START_STRATEGIES -->
+<!-- START_INJECT_STRATEGIES_DOCUMENTATION -->
+### HiddenPair
+No description available.
+
+### HiddenQuad
+No description available.
+
 ### HiddenSingle
 No description available.
 
+### HiddenSubset
+HiddenSubset(subset_size: Literal[2, 3])
+
+### HiddenTriple
+No description available.
+
 ### NakedPair
+No description available.
+
+### NakedQuad
 No description available.
 
 ### NakedSingle
 No description available.
 
 ### NakedSubset
-NakedSubset(subset_size: Literal[2, 3])
+NakedSubset(subset_size: Literal[2, 3, 4])
 
 ### NakedTriple
 No description available.
-<!-- END_STRATEGIES -->
+<!-- END_INJECT_STRATEGIES_DOCUMENTATION -->
 
 ### Generators
 
