@@ -1,13 +1,10 @@
 from typing import Callable, Iterator, get_args, Sequence, Union
+from pathlib import Path
+
 from dataclasses import dataclass
 
 from .core import Cell, Digit, Nine, Index, Position
 from .unit import Unit
-
-import typing
-
-if typing.TYPE_CHECKING:
-    from pathlib import Path
 
 
 @dataclass(frozen=True)

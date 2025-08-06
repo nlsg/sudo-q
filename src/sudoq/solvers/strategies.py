@@ -1,11 +1,11 @@
-from typing import Iterator, Optional, Literal
+from typing import Optional, Literal
 from dataclasses import dataclass
 
 import itertools
 
 from ..protocols import SolvingStrategy
 from ..grid import Grid
-from ..core import Position, Cell
+from ..core import Cell
 from ..core import iter_unit_positions
 
 
@@ -124,22 +124,6 @@ class NakedSubset(SolvingStrategy):
                             return Cell(position=pos, value=digit)
 
         return None
-
-    @staticmethod
-    def _iter_row_positions() -> Iterator[list[Position]]:
-        return ([(row, col) for col in range(9)] for row in range(9))
-
-    @staticmethod
-    def _iter_col_positions() -> Iterator[list[Position]]:
-        return ([(row, col) for row in range(9)] for col in range(9))
-
-    @staticmethod
-    def _iter_box_positions() -> Iterator[list[Position]]:
-        return (
-            [(r + dr, c + dc) for dr in range(3) for dc in range(3)]
-            for r in (0, 3, 6)
-            for c in (0, 3, 6)
-        )
 
 
 class NakedPair(NakedSubset):
