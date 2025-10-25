@@ -145,6 +145,21 @@ def test_empty_composite_reducer():
     assert reducers.CompositeReducer([]).select_position(grid) is None
 
 
+def test_sequential_reducer():
+    reducer1 = reducers.DigitReducer(digit=4, keep_count=1)
+    reducer2 = reducers.RandomCellReducer()
+    sequential = reducers.SequentialReducer([reducer1, reducer2])
+
+    grid = Grid.construct_empty()
+    grid = grid.with_placement(Cell(position=(0, 0), value=4))
+    grid = grid.with_placement(Cell(position=(1, 1), value=5))
+
+    # First reducer (DigitReducer) should not select anything (keep_count=1, we have 1)
+    # It returns None, so SequentialReducer moves to second reducer
+    # Second reducer (RandomCellReducer) should select a random filled cell
+    assert sequential.select_position(grid) in [(0, 0), (1, 1)]
+
+
 def test_reducing_empty_grid():
     reducers.CompositeReducer(
         [

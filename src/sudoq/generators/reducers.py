@@ -49,3 +49,17 @@ class CompositeReducer(CellReducer):
             if self._current_index == start_index:
                 return None
         return None
+
+
+class SequentialReducer(CellReducer):
+    def __init__(self, reducers: Sequence[CellReducer]):
+        self.reducers = reducers
+        self._current_index = 0
+
+    def select_position(self, grid: Grid) -> Optional[Position]:
+        for reducer in self.reducers:
+            if position := reducer.select_position(grid):
+                return position
+            else:
+                self._current_index += 1
+        return None
