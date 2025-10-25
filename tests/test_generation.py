@@ -28,6 +28,18 @@ def test_unique_filling():
     )
 
 
+@pytest.mark.parametrize("max_clues", [40, 32])
+def test_max_clues(max_clues):
+    assert (
+        generators.PuzzleGenerator(
+            max_clues=max_clues, reducers=[reducers.RandomCellReducer()]
+        )
+        .generate(tries=100)
+        .count_filled()
+        <= max_clues
+    )
+
+
 def test_random_cell_reducer():
     reducer = reducers.RandomCellReducer()
     grid = Grid.construct_empty().with_placement(Cell(position=(0, 0), value=5))
