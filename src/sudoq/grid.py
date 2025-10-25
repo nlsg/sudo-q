@@ -134,6 +134,19 @@ class Grid:
             for own_unit, other_unit in zip(self.iter_rows(), other.iter_rows())
         )
 
+    def to_string(self) -> str:
+        """Serialize the grid to a compact string of 81 digits (0-9)."""
+        return "".join(str(val) for row in self.rows for val in row.values)
+
+    def rotate(self) -> "Grid":
+        """Return a new grid rotated 90 degrees clockwise."""
+        n = 9
+        new_matrix = [[0] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(n):
+                new_matrix[i][j] = self.rows[n - 1 - j][i]
+        return Grid.from_value_matrix(new_matrix)
+
     def __str__(self):
         def format_unit(unit):
             return " ".join(

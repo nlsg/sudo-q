@@ -93,6 +93,44 @@ def test_board_str(sample_board):
     )
 
 
+def test_grid_to_string(sample_board):
+    grid_string = sample_board.to_string()
+    assert len(grid_string) == 81
+    assert all(c in "0123456789" for c in grid_string)
+    # Round trip
+    reconstructed = Grid.from_string(grid_string)
+    assert reconstructed == sample_board
+
+
+def test_grid_rotate_90_clockwise():
+    # Test with values in bottom-right 3x3, expect rotated in top-left 3x3
+    simple_grid = Grid.from_value_matrix(
+        [[0] * 9] * 6
+        + [
+            [1, 2, 3] + [0] * 6,
+            [4, 5, 6] + [0] * 6,
+            [7, 8, 9] + [0] * 6,
+        ]
+    )
+    rotated = simple_grid.rotate()
+    # Expected: rotated 3x3 at top-left
+    expected_values = [
+        [7, 4, 1] + [0] * 6,
+        [8, 5, 2] + [0] * 6,
+        [9, 6, 3] + [0] * 6,
+    ] + [[0] * 9] * 6
+    expected = Grid.from_value_matrix(expected_values)
+    assert rotated == expected
+
+
+def test_rotate_360_degrees_returns_original(sample_board):
+    # Rotating 4 times should equal original
+    rotated = sample_board
+    for _ in range(4):
+        rotated = rotated.rotate()
+    assert rotated == sample_board
+
+
 # Cell tests
 def test_cell_is_empty():
     cell = Cell(position=(0, 0), value=0)
