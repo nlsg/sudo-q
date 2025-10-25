@@ -14,10 +14,12 @@ class PuzzleGenerator:
     reducers: Sequence[CellReducer]
     solver: Solver = field(default_factory=StrategicSolver)
     min_clues: int = 17
+    max_clues: int | None = None
 
     def fill_grid(self, grid: Grid | None) -> Grid:
         return BacktrackingSolver(
-            position_chooser=lambda position, *a: random.choice(list(position))
+            solve_step_hook=Grid.rotate,
+            position_chooser=lambda position, _: random.choice(list(position)),
         ).solve(grid or Grid.construct_empty())
 
     def generate(self, grid: Grid | None = None) -> Grid:

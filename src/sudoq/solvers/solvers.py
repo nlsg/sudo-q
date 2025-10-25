@@ -38,13 +38,16 @@ class BacktrackingSolver(Solver):
     """A solver that uses backtracking to find a solution for the grid."""
 
     position_chooser: Callable[[Iterator[T]], T] = next
+    solve_step_hook: Callable[[Grid], Grid] = lambda g: g
 
     def solve(self, grid: Grid) -> Grid:
         if not (position := self.position_chooser(grid.iter_positions(0), None)):
             return grid
         for candidate in grid.get_candidates(position):
-            board = BacktrackingSolver().solve(
-                grid.with_placement(Cell(position=position, value=candidate))
+            board = self.solve_step_hook(
+                BacktrackingSolver().solve(
+                    grid.with_placement(Cell(position=position, value=candidate))
+                )
             )
             if board.is_complete():
                 return board
