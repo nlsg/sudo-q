@@ -6,7 +6,7 @@ from ..grid import Grid
 from ..core import Cell
 from ..solvers import BacktrackingSolver, StrategicSolver
 from ..protocols import Solver, CellReducer
-from .reducers import CompositeReducer
+from .reducers import SequentialReducer
 
 
 @dataclass
@@ -34,7 +34,7 @@ class PuzzleGenerator:
     def _generate(self, grid: Grid | None = None) -> Grid:
         next_puzzle = puzzle = self.fill_grid(grid)
 
-        reducer = CompositeReducer(self.reducers)
+        reducer = SequentialReducer(self.reducers)
         while next_puzzle.count_filled() > self.min_clues:
             if not self.solver.solve(next_puzzle).is_complete():
                 return puzzle
