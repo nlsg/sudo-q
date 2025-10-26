@@ -1,17 +1,28 @@
-from typing import Sequence, Optional
+from typing import Sequence, Optional, Callable
 import random
+from dataclasses import dataclass
 
-from ..core import Position
+from ..core import Position, Digit
 from ..protocols import CellReducer
 from ..grid import Grid
 
+type PositionChooser = Callable[[Digit], bool]
 
-class RandomCellReducer(CellReducer):
+
+@dataclass
+class GenericReducer(CellReducer):
+    position_chooser: PositionChooser
+
     def select_position(self, grid: Grid) -> Optional[Position]:
-        filled_positions = list(grid.iter_positions(lambda digit: digit != 0))
+        filled_positions = list(grid.iter_positions(self.position_chooser))
         if not filled_positions:
             return None
         return random.choice(filled_positions)
+
+
+class RandomCellReducer(GenericReducer):
+    def __init__(self):
+        super().__init__(position_chooser=lambda digit: digit != 0)
 
 
 class DigitReducer(CellReducer):
