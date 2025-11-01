@@ -2,7 +2,7 @@ from typing import Sequence, Callable, Iterator, TypeVar
 from dataclasses import dataclass, field
 
 from ..grid import Grid
-from ..core import Cell
+from ..core import Cell, Position, CellValue
 from ..protocols import Solver, SolvingStrategy
 from .strategies import all_strategies
 
@@ -37,13 +37,14 @@ class StrategicSolver(Solver):
 class BacktrackingSolver(Solver):
     """A solver that uses backtracking to find a solution for the grid."""
 
-    position_chooser: Callable[[Iterator[T]], T] = next
+    position_chooser: Callable[[Iterator[Position]], Position] = next
+    candidate_hook: Callable[[set[CellValue]], Iterator[CellValue]] = lambda s: s
     solve_step_hook: Callable[[Grid], Grid] = lambda g: g
 
     def solve(self, grid: Grid) -> Grid:
         if not (position := self.position_chooser(grid.iter_positions(0), None)):
             return grid
-        for candidate in grid.get_candidates(position):
+        for candidate in self.candidate_hook(grid.get_candidates(position)):
             board = self.solve_step_hook(
                 BacktrackingSolver().solve(
                     grid.with_placement(Cell(position=position, value=candidate))

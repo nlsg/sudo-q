@@ -1,7 +1,7 @@
 import pytest
 
 
-from context import Grid, Unit, Digit, Nine, SAMPLE_DIR
+from context import Grid, Unit, Digit, Nine, SAMPLE_DIR, NineDigits
 
 
 @pytest.mark.parametrize(
@@ -18,7 +18,10 @@ def test_unit_is_valid(values: Nine[Digit], expectation: bool):
 
 
 def test_board_is_valid():
-    board = Grid(rows=[Unit(values=(1, 2, 3, 4, 5, 6, 7, 8, 9)) for _ in range(9)])
+    board = Grid(
+        digit_type=NineDigits,
+        rows=[Unit(values=(1, 2, 3, 4, 5, 6, 7, 8, 9)) for _ in range(9)],
+    )
     assert board.is_valid()
 
 

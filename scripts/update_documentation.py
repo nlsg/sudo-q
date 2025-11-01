@@ -49,4 +49,7 @@ def inject_strategies():
 
 
 if __name__ == "__main__":
-    exit(0 if (inject_code_examples() and inject_strategies()) else 1)
+    exit(0)
+    # exit(inject_strategies())
+    # exit(inject_strategies())
+    # exit(0 if (inject_code_examples() and inject_strategies()) else 1)

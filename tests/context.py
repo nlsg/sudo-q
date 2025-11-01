@@ -12,6 +12,8 @@ from sudoq import (
     Cell,
     strategies,
     reducers,
+    NineDigits,
+    HexDigits,
 )
 
 TEST_DIR = Path(__file__).parent
@@ -35,6 +37,11 @@ def solved_sample_board():
     )
 
 
+@pytest.fixture(scope="module", params=[NineDigits, HexDigits], ids=["Nine", "Hex"])
+def empty_grid(request):
+    return Grid.construct_empty(request.param)
+
+
 __all__ = [
     Grid,
     Unit,
@@ -47,4 +54,6 @@ __all__ = [
     Cell,
     strategies,
     reducers,
+    NineDigits,
+    HexDigits,
 ]

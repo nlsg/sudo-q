@@ -1,8 +1,17 @@
 import pytest
 
-from context import Grid, sample_board, SAMPLE_DIR, Cell
+from context import (
+    Grid,
+    sample_board,
+    SAMPLE_DIR,
+    Cell,
+    NineDigits,
+    HexDigits,
+    empty_grid,
+)
 
 sample_board = sample_board
+empty_grid = empty_grid
 
 
 def test_board_from_values(sample_board):
@@ -67,11 +76,28 @@ def test_board_from_csv_is_valid(tmp_path, delimiter):
     assert board.is_valid()
 
 
-def test_construct_empty():
-    empty_board = Grid.construct_empty()
-    assert len(empty_board.rows) == 9
-    assert all(len(u.values) == 9 for u in empty_board.rows)
-    assert empty_board.is_valid()
+def test_construct_empty(empty_grid):
+    assert len(empty_grid.rows) == empty_grid.N
+    assert all(len(u.values) == empty_grid.N for u in empty_grid.rows)
+    assert empty_grid.is_valid()
+
+
+def test_generic_hex_construct_empty():
+    g = Grid.construct_empty(digit_type=HexDigits)
+    assert len(g.to_string()) == 16 * 16
+    assert g.N == 16
+    assert g.box_side == 4
+
+
+def test_generic_nine_construct_empty():
+    g = Grid[NineDigits].construct_empty()
+    assert len(g.to_string()) == 81
+    assert g.N == 9
+    assert g.box_side == 3
+
+
+def test_default_construct_empty_is_nine_digits():
+    assert Grid.construct_empty() == Grid.construct_empty(digit_type=NineDigits)
 
 
 def test_board_str(sample_board):

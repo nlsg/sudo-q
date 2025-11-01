@@ -50,7 +50,7 @@ def test_iter_cols(path: Path):
     board = Grid.from_csv_file(str(path))
     lines = get_lines_of_csv(path)
     for i, unit in enumerate(board.iter_cols()):
-        assert unit.values == [lines[j][i] for j in range(9)]
+        assert unit.values == tuple(lines[j][i] for j in range(9))
 
 
 @pytest.mark.parametrize("path", (SAMPLE_DIR / "valid-1.csv",))
@@ -58,7 +58,7 @@ def test_iter_boxes(path: Path):
     board = Grid.from_csv_file(str(path))
     lines = get_lines_of_csv(path)
     for (row_offset, col_offset), unit in zip(iter_offsets(), board.iter_boxes()):
-        box = list(
+        box = tuple(
             lines[row_offset + i][col_offset + r] for i in range(3) for r in range(3)
         )
         assert unit.values == box

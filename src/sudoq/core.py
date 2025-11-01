@@ -1,4 +1,5 @@
-from typing import Literal, Tuple, TypeVar, get_args, Annotated, Iterator
+from __future__ import annotations
+from typing import Literal, Tuple, TypeVar, Iterator, Union
 from dataclasses import dataclass
 import itertools
 
@@ -8,16 +9,24 @@ Nine = Tuple[T, T, T, T, T, T, T, T, T]
 Digit = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 Index = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-Position = Annotated[Tuple[Index, Index], "row, column"]
+Position = tuple[int, int]
 
 
-DIGITS = set(get_args(Digit)) - {0}
+CellValue = Union[int, str]
+
+
+NineDigits = Literal[1, 2, 3, 4, 5, 6, 7, 8, 9]
+HexDigits = Literal[1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g"]
+
+
+class BaseGrid:
+    pass
 
 
 @dataclass(frozen=True)
 class Cell:
     position: Position
-    value: Digit
+    value: CellValue
 
     def is_empty(self) -> bool:
         return self.value == 0

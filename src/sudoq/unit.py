@@ -1,26 +1,35 @@
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import TypeVar, Generic, get_args
+from .core import NineDigits
 
-from .core import Digit, Nine, DIGITS
+
+T = TypeVar("T")
 
 
 @dataclass(frozen=True)
-class Unit(Sequence):
-    values: Nine[Digit]
+class Unit(Sequence, Generic[T]):
+    values: tuple[T, ...]
+    digit_type: type[T] = field(default=NineDigits)
+
+    @property
+    def digit_set(self) -> frozenset[T]:
+        return frozenset(get_args(self.digit_type))
 
     def is_valid(self):
-        return len(self.values) == 9 and all(
-            self.values.count(i) <= 1 for i in range(1, 10)
+        N = len(self.digit_set)
+        return len(self.values) == N and all(
+            self.values.count(d) <= 1 for d in self.digit_set if d != 0
         )
 
     def is_complete(self) -> bool:
         return 0 not in self.values
 
-    def get_filled_values(self) -> set[Digit]:
+    def get_filled_values(self) -> set[T]:
         return set(self.values) - {0}
 
-    def get_candidates(self) -> set[Digit]:
-        return DIGITS - self.get_filled_values()
+    def get_candidates(self) -> set[T]:
+        return self.digit_set - self.get_filled_values()
 
     def __eq__(self, other: "Unit"):
         return isinstance(other, Unit) and all(

@@ -1,5 +1,7 @@
 import pytest
-from context import Grid, generators, reducers, solvers, Cell
+from context import Grid, generators, reducers, solvers, Cell, empty_grid
+
+empty_grid = empty_grid
 
 
 def test_generate_complete():
@@ -77,13 +79,12 @@ def test_digit_reducer_with_keep_count(keep_count):
     assert puzzle.count_digit(4) == keep_count
 
 
-def test_composite_reducer():
+def test_composite_reducer(empty_grid):
     reducer1 = reducers.DigitReducer(digit=4, keep_count=1)
     reducer2 = reducers.RandomCellReducer()
     composite = reducers.CompositeReducer([reducer1, reducer2])
 
-    grid = Grid.construct_empty()
-    grid = grid.with_placement(Cell(position=(0, 0), value=4))
+    grid = empty_grid.with_placement(Cell(position=(0, 0), value=4))
     grid = grid.with_placement(Cell(position=(1, 1), value=5))
 
     # First reducer should not select anything (keep_count=1)
@@ -105,7 +106,7 @@ def test_puzzle_generator():
     assert solvers.StrategicSolver().solve(puzzle).is_complete()
 
 
-def test_puzzle_generator_with_digit_reducer():
+def test_puzzle_generator_with_digit_reducer(empty_grid):
     generator = generators.PuzzleGenerator(
         reducers=[
             reducers.DigitReducer(digit=4, keep_count=1),
@@ -113,7 +114,7 @@ def test_puzzle_generator_with_digit_reducer():
         min_clues=17,
     )
 
-    puzzle = generator.generate()
+    puzzle = generator.generate(empty_grid)
 
     assert puzzle.is_valid()
     assert puzzle.count_filled() >= 17

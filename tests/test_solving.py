@@ -10,9 +10,11 @@ from context import (
     solvers,
     Cell,
     strategies,
+    empty_grid,
 )
 
 sample_board = sample_board
+empty_grid = empty_grid
 solved_sample_board = solved_sample_board
 solvable_grid = solvable_grid
 
